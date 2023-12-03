@@ -1,32 +1,43 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+USE IEEE.numeric_std.all;
 
-entity Memory is
-    Port ( clk : in STD_LOGIC;
-           rst : in STD_LOGIC;
-           mem_rw : in STD_LOGIC;  -- Read/Write control signal
-           mem_addr : in STD_LOGIC_VECTOR(11 downto 0);  -- Address bus (12 bits for 4 KB)
-           mem_data_in : in STD_LOGIC_VECTOR(15 downto 0);  -- Data input bus
-           mem_data_out : out STD_LOGIC_VECTOR(15 downto 0)  -- Data output bus
-    );
-end Memory;
+entity dataMem is
+Generic (n: integer := 16);        
+port(
+    clk:                IN std_logic;
+    rst :               IN std_logic;
+    readAddress :    	IN std_logic_vector(9 DOWNTO 0);        -- 10 bit address
+    readEnable :        IN std_logic;
+    writeAddress :    	IN std_logic_vector(9 DOWNTO 0);        -- 10 bit address
+    writeEnable :       IN std_logic;
+    writeData :         IN std_logic_vector(n-1 DOWNTO 0);
+    readData :          OUT std_logic_vector(n-1 DOWNTO 0)
+);
+end entity;
 
-architecture Behavioral of Memory is
-    type memory_array is array (0 to 4095) of STD_LOGIC_VECTOR(15 downto 0);
-    signal memory : memory_array := (others => (others => '0'));
+
+
+architecture dataMemDesign of dataMem is
+TYPE ram_type IS ARRAY(0 TO 2**12-1) of std_logic_vector(n-1 DOWNTO 0);			
+    signal ram : ram_type;
+
 begin
-    process(clk, rst)
-    begin
-        if rst = '1' then
-            memory <= (others => (others => '0'));
-        elsif rising_edge(clk) then
-            if mem_rw = '1' then  -- Read operation
-                mem_data_out <= memory(to_integer(unsigned(mem_addr)));
-            else  -- Write operation
-                memory(to_integer(unsigned(mem_addr))) <= mem_data_in;
-            end if;
-        end if;
-    end process;
-end Behavioral;
+
+    PROCESS (clk,rst)
+    BEGIN
+        IF rst = '1' THEN            
+            ram <= (others=>(others=>'0'));
+            
+        ELSIF falling_edge(clk) and writeEnable = '1' THEN
+                ram(to_integer(unsigned(writeAddress))) <= writeData;
+            ELSE
+            -- END IF;
+        END IF;
+    END PROCESS;
+
+    readData <= ram(to_integer(unsigned((readAddress)))) WHEN readEnable = '1'  
+    ELSE (OTHERS => '0');
+    
+end dataMemDesign;
+
