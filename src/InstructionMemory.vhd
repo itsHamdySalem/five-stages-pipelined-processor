@@ -3,20 +3,18 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
 
 ENTITY instructionMem IS
-    GENERIC (m: integer:= 16);
     PORT (
         rst :               IN std_logic;
-        readAddress :    	IN std_logic_vector(9 DOWNTO 0);
-        instruction :       OUT std_logic_vector(m-1 DOWNTO 0); 
-        immediate :         OUT std_logic_vector(m-1 DOWNTO 0);
-        memZero :           OUT std_logic_vector(m-1 DOWNTO 0);
-        memOne :           OUT std_logic_vector(m-1 DOWNTO 0)
-
+        readAddress :    	IN std_logic_vector(11 DOWNTO 0);
+        instruction :       OUT std_logic_vector(15 DOWNTO 0); 
+        immediate :         OUT std_logic_vector(15 DOWNTO 0);
+        memZero :           OUT std_logic_vector(15 DOWNTO 0);
+        memOne :           OUT std_logic_vector(15 DOWNTO 0)
     );
 END ENTITY instructionMem;
 
 ARCHITECTURE instructionMem_design OF instructionMem  IS 
-    TYPE ram_type IS ARRAY(0 TO 2**10 - 1) OF std_logic_vector(m-1 DOWNTO 0);
+    TYPE ram_type IS ARRAY(0 TO 2**12 - 1) OF std_logic_vector(15 DOWNTO 0);
     
     SIGNAL ram : ram_type ;
     
