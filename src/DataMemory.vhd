@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 USE IEEE.numeric_std.all;
 
 entity dataMem is
-Generic (n: integer := 32);        
+Generic (n: integer := 16);        
 port(
     clk:                IN std_logic;
     rst :               IN std_logic;
