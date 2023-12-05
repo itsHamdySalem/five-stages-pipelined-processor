@@ -15,9 +15,15 @@ END IF_ID;
 
 ARCHITECTURE IF_ID_Design OF IF_ID IS
 BEGIN
-    RS1 <= instruction(6 DOWNTO 4);
-    RS2 <= instruction(3 DOWNTO 1);
-    Rdest <= instruction(9 DOWNTO 7);
+PROCESS (clk, reset)
+BEGIN
+
+    IF rising_edge(clk) THEN
+        RS1 <= instruction(6 DOWNTO 4);
+        RS2 <= instruction(3 DOWNTO 1);
+        Rdest <= instruction(9 DOWNTO 7);
+    END IF;
+END PROCESS;
 END IF_ID_Design;
 
 

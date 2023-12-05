@@ -20,7 +20,7 @@ BEGIN
         VARIABLE pcINC: std_logic_vector(15 DOWNTO 0);
     BEGIN
         IF reset = '1' THEN
-            pc_reg <= memZero;
+            pc_reg <= x"0000";
         ELSIF rising_edge(clk) THEN
             IF enable = '1' THEN
                 pcINC := std_logic_vector(unsigned(pc_reg) + unsigned(inc));
