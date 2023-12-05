@@ -1,41 +1,46 @@
 library ieee;
 use ieee.std_logic_1164.all;
-USE IEEE.numeric_std.all;
+use ieee.numeric_std.all;
 
 entity dataMem is
-port(
-    clk:                IN std_logic;
-    rst :               IN std_logic;
-    readAddress :    	IN std_logic_vector(11 DOWNTO 0);       
-    readEnable :        IN std_logic;
-    writeAddress :    	IN std_logic_vector(11 DOWNTO 0);    
-    writeEnable :       IN std_logic;
-    writeData :         IN std_logic_vector(15 DOWNTO 0);
-    readData :          OUT std_logic_vector(15 DOWNTO 0)
-);
+    port(
+        clk:                in std_logic;
+        rst:                in std_logic;
+        readAddress:        in std_logic_vector(11 downto 0);
+        readEnable:         in std_logic;
+        writeAddress:       in std_logic_vector(11 downto 0);
+        writeEnable:        in std_logic;
+        writeData:          in std_logic_vector(15 downto 0);
+        readData:           out std_logic_vector(15 downto 0);
+        protectAddress:     in std_logic_vector(11 downto 0); -- New input for protecting a cell
+        protectEnable:      in std_logic;                    -- New input for protecting a cell
+        isCellProtected:    out std_logic                    -- New output indicating if the cell is protected
+    );
 end entity;
 
-
-
 architecture dataMemDesign of dataMem is
-    TYPE ram_type IS ARRAY(0 TO 2**12-1) of std_logic_vector(15 DOWNTO 0);			
-    signal ram : ram_type;
+    type ram_type is array(0 to 2**12 - 1) of std_logic_vector(15 downto 0);
+    signal ram: ram_type;
+    type ram_protected_type is array(0 to 2**12 - 1) of std_logic;
+    signal ram_protected: ram_protected_type;
+
 begin
 
-    PROCESS (clk,rst)
-    BEGIN
-        IF rst = '1' THEN            
-            ram <= (others=>(others=>'0'));
-            
-        ELSIF falling_edge(clk) and writeEnable = '1' THEN
+    process(clk, rst)
+    begin
+        if rst = '1' then
+            ram <= (others => (others => '0'));
+            ram_protected <= (others => '0');
+        elsif falling_edge(clk) then
+            if protectEnable = '1' then
+                ram_protected(to_integer(unsigned(protectAddress))) <= '1';
+            elsif writeEnable = '1' and ram_protected(to_integer(unsigned(writeAddress))) = '0' then
                 ram(to_integer(unsigned(writeAddress))) <= writeData;
-            ELSE
-            -- END IF;
-        END IF;
-    END PROCESS;
+            end if;
+        end if;
+    end process;
 
-    readData <= ram(to_integer(unsigned((readAddress)))) WHEN readEnable = '1'  
-    ELSE (OTHERS => '0');
-    
+    readData <= ram(to_integer(unsigned(readAddress))) when readEnable = '1' else (others => '0');
+    isCellProtected <= ram_protected(to_integer(unsigned(protectAddress)));
+
 end dataMemDesign;
-
