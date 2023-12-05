@@ -16,8 +16,18 @@ Architecture Processor_design of Processor is
     signal PcData:                  std_logic_vector(15 downto 0);
     signal instruction, immediate, pcOut, memOne: std_logic_vector(15 DOWNTO 0);
     signal Rdest, RS1, RS2 : std_logic_vector(2 DOWNTO 0);
-    signal RS1Data, RS2Data : std_logic_vector(31 DOWNTO 0);
-
+    signal RS1Data, RS2Data, RDestData : std_logic_vector(31 DOWNTO 0);
+    signal ImmSig,
+    InOpSig,        
+    OutOpSig,       
+    MemOpSig,       
+    regWriteSig,    
+    pcSrcSig,    
+    memReadSig,     
+    memWriteSig,    
+    memToRegSig,    
+    spIncSig,    
+    spDecSig : STD_LOGIC;
 
 BEGIN
     fetchStageInstance: entity work.fetchStage port map(
@@ -48,8 +58,21 @@ BEGIN
         RS1,
         RS2,
         Rdest,
+        instruction,
         RS1Data,
-        RS2Data
+        RS2Data,
+        RDestData,
+        ImmSig,
+        InOpSig,        
+        OutOpSig,       
+        MemOpSig,       
+        regWriteSig,    
+        pcSrcSig,    
+        memReadSig,     
+        memWriteSig,    
+        memToRegSig,    
+        spIncSig,    
+        spDecSig       
     );
 
 END Processor_design;
