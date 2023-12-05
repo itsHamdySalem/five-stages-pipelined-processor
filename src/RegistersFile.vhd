@@ -7,11 +7,14 @@ entity RegistersFile is
            rst : in STD_LOGIC;
            Rsrc1_sel : in std_logic_vector(2 downto 0);
            Rsrc2_sel : in std_logic_vector(2 downto 0);
+           Rdst_sel : in STD_LOGIC_VECTOR(31 downto 0);
            write_flag : in std_logic;
            write_reg : in std_logic_vector(2 downto 0);
            write_data : in STD_LOGIC_VECTOR(31 downto 0);
-           readData1 : out STD_LOGIC_VECTOR(31 downto 0);
-           readData2 : out STD_LOGIC_VECTOR(31 downto 0)
+
+           Rsrc1 : out STD_LOGIC_VECTOR(31 downto 0);
+           Rsrc2 : out STD_LOGIC_VECTOR(31 downto 0);
+           Rdst : out STD_LOGIC_VECTOR(31 downto 0)
     );
 end RegistersFile;
 
@@ -37,6 +40,7 @@ begin
             end if;
         end if;
     end process;
-    readData1 <= R(to_integer(unsigned(Rsrc1_sel)));
-    readData2 <= R(to_integer(unsigned(Rsrc2_sel)));
+    Rsrc1 <= R(to_integer(unsigned(Rsrc1_sel)));
+    Rsrc2 <= R(to_integer(unsigned(Rsrc2_sel)));
+    Rdst <= R(to_integer(unsigned(Rdst_sel)));
 end Behavioral;
