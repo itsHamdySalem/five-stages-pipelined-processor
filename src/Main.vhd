@@ -16,6 +16,7 @@ Architecture Processor_design of Processor is
     signal PcData:                  std_logic_vector(15 downto 0);
     signal instruction, immediate, pcOut, memOne: std_logic_vector(15 DOWNTO 0);
     signal Rdest, RS1, RS2 : std_logic_vector(2 DOWNTO 0);
+    signal RS1Data, RS2Data : std_logic_vector(31 DOWNTO 0);
 
 
 BEGIN
@@ -40,6 +41,16 @@ BEGIN
         Rdest
     );
 
+
+    DecodeInstance: entity work.DecodingStage port map(
+        clk,
+        reset,
+        RS1,
+        RS2,
+        Rdest,
+        RS1Data,
+        RS2Data
+    );
 
 END Processor_design;
 

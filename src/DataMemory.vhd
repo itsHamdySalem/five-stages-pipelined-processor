@@ -27,7 +27,7 @@ architecture dataMemDesign of dataMem is
 begin
 
     process(clk, rst)
-    begin
+    begin    
         if rst = '1' then
             ram <= (others => (others => '0'));
             ram_protected <= (others => '0');
@@ -39,7 +39,7 @@ begin
             end if;
         end if;
     end process;
-
+    
     readData <= ram(to_integer(unsigned(readAddress))) when readEnable = '1' else (others => '0');
     isCellProtected <= ram_protected(to_integer(unsigned(protectAddress)));
 

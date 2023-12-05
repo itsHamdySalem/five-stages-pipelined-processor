@@ -48,7 +48,7 @@ signal isImmediate:                         std_logic;
 BEGIN
     
     pcc:            entity work.PC port map(clk, reset, enable, increment, pcSel, pcData, pcOutput, memZero);
-    instructions:   instructionMem port map(reset, pcOutput(11 downto 0),outInstruction,immediate,memZero,memOne);
+    instructions:   entity work.instructionMem port map(clk, reset, pcOutput(11 downto 0), outInstruction,immediate,memZero,memOne);
     isImmediate <= outInstruction(10);
     instruction <= outInstruction;
 
