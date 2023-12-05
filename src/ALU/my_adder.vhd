@@ -3,8 +3,6 @@ LIBRARY IEEE;
 
 USE IEEE.std_logic_1164.all;
 
--- single bit adder
-
 ENTITY my_adder IS
 PORT( a,b,cin : IN std_logic;
 s,cout : OUT std_logic);
