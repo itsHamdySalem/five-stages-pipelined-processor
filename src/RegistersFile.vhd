@@ -30,7 +30,7 @@ begin
         -- R(6) <= "00000000000000000000000001000000";
         -- R(7) <= "00000000000000000000000010000000";
         if rst = '1' then
-            R <= (others => (others => '0'));
+            R <= (others => (others => '0'));   
         elsif falling_edge(clk) then
             if write_flag = '1' then
                 R(to_integer(unsigned(write_reg))) <= write_data;
