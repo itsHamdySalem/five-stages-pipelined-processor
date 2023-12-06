@@ -19,8 +19,8 @@ entity ID_EX is
            Rdst_sel_out : out STD_LOGIC_VECTOR(2 downto 0);
            immediate_out : out STD_LOGIC_VECTOR(31 downto 0);
            Rsrc1_out, Rsrc2_out, Rdest_out : out STD_LOGIC_VECTOR(31 downto 0);
-           isImmediate : out std_logic; -- 4-th bit in Ex_control
-           ALU_OP : out STD_LOGIC_VECTOR(4 downto 0); -- [3:0] bits of Ex_control
+           isImmediate : out std_logic;
+           ALU_OP : out STD_LOGIC_VECTOR(4 downto 0);
            Mem_control_out : out STD_LOGIC_VECTOR(2 downto 0);
            WB_control_out : out STD_LOGIC_VECTOR(2 downto 0);
            instruction_out: out STD_LOGIC_VECTOR(15 downto 0);

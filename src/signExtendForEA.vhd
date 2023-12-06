@@ -9,6 +9,6 @@ end entity;
 
 architecture sign_extend_arch of sign_extend is
 begin
-    OUTPUT(31 downto 16) <=  (others => INPUT(15));
-    OUTPUT(15 downto 0) <= INPUT;
+    OUTPUT(31 downto 20) <=  (others => '0');
+    OUTPUT(19 downto 0) <= INPUT;
 end architecture;
