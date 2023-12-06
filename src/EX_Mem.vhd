@@ -28,7 +28,7 @@ begin
         if rising_edge(clk) then
             instruction_out <= instruction;
             MemAdr_out <= MemAdr_in;
-            Rdst_sel_out <= MemAdr_in;
+            Rdst_sel_out <= Rdst_sel_in;
             memReadSig_out <= memReadSig_in;
             Aluout <= Aluin;
         end if;

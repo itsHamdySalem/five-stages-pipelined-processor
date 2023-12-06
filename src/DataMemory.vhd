@@ -27,6 +27,10 @@ begin
 
     process(clk, rst)
     begin    
+        ram(0) <= x"00F1";
+        ram(1) <= x"00F2";
+        ram(2) <= x"00F3";
+        ram(3) <= x"00F4";
         if rst = '1' then
             ram <= (others => (others => '0'));
             ram_protected <= (others => '0');

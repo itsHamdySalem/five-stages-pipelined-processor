@@ -21,7 +21,7 @@ BEGIN
     PROCESS (clk, rst)
 
     BEGIN
-    ram(0) <= "0000100100000000";  -- NOT instruction
+    ram(0) <= "1101000100000000";  -- LDD instruction
     ram(1) <= "0010001000001000";  -- DEC instruction
     ram(2) <= "1001101100001101";  -- OR instruction
     
