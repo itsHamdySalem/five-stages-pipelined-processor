@@ -124,7 +124,7 @@ BEGIN
         RS1Data_D,
         RS2Data_D,
         RDestData_D,
-        '0',
+        ImmSig_D,
         instruction_D(15 DOWNTO 11),
         "000",
         "000",

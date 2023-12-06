@@ -22,9 +22,12 @@ BEGIN
 
     BEGIN
     ram(0) <= "1101000000000000";  -- LDD instruction
-    ram(1) <= "0010001000001000";  -- DEC instruction
-    ram(3) <= "1001101100001101";  -- OR instruction
-    
+    ram(1) <= "0000000000000001";  -- Imm
+    ram(2) <= "0010001000001000";  -- DEC instruction
+    ram(3) <= "0010001000001000";  -- DEC instruction
+    ram(4) <= "0010001000001000";  -- DEC instruction
+    ram(5) <= "1001101100001101";  -- OR instruction
+
 
     IF rising_edge(clk) THEN
         instruction  <= ram(to_integer(unsigned(readAddress)));
