@@ -15,7 +15,16 @@ ENTITY ExecutionStage IS
         ImmVal :          IN std_logic_vector(31 DOWNTO 0);
         willBranch:              OUT STD_LOGIC;
         outFlag:              OUT std_logic_vector(2 DOWNTO 0);
-        Alu_Out:                OUT std_logic_vector(31 downto 0)
+        Alu_Out:                OUT std_logic_vector(31 downto 0);
+        memReadSig_in:          IN STD_LOGIC;
+        memReadSig_out:         out STD_LOGIC;
+        instruction_out:        out std_logic_vector(15 DOWNTO 0);
+        Rdst_sel_in : IN STD_LOGIC_VECTOR(2 downto 0);
+        Rdst_sel_out : out STD_LOGIC_VECTOR(2 downto 0);
+        MemAdr : in STD_LOGIC_VECTOR(31 downto 0);
+        MemAdr_out : out STD_LOGIC_VECTOR(31 downto 0)
+
+
     );
 END ENTITY ExecutionStage;
 
@@ -40,6 +49,10 @@ BEGIN
             outFlag <= outFlag_temp;
     --     END IF;
     -- END PROCESS;
+    memReadSig_out <= memReadSig_in;
+    instruction_out <= instruction;
 
+    Rdst_sel_out <= Rdst_sel_in;
+    MemAdr_out <= MemAdr;
 
 END execution;

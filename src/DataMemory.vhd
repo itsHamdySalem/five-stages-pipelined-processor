@@ -13,8 +13,7 @@ entity dataMem is
         writeData:          in std_logic_vector(15 downto 0);
         readData:           out std_logic_vector(15 downto 0);
         protectAddress:     in std_logic_vector(11 downto 0); -- New input for protecting a cell
-        protectEnable:      in std_logic;                    -- New input for protecting a cell
-        isCellProtected:    out std_logic                    -- New output indicating if the cell is protected
+        protectEnable:      in std_logic                    -- New input for protecting a cell
     );
 end entity;
 
@@ -41,6 +40,5 @@ begin
     end process;
     
     readData <= ram(to_integer(unsigned(readAddress))) when readEnable = '1' else (others => '0');
-    isCellProtected <= ram_protected(to_integer(unsigned(protectAddress)));
 
 end dataMemDesign;

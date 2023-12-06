@@ -24,7 +24,10 @@ entity ID_EX is
            Mem_control_out : out STD_LOGIC_VECTOR(2 downto 0);
            WB_control_out : out STD_LOGIC_VECTOR(2 downto 0);
            instruction_out: out STD_LOGIC_VECTOR(15 downto 0);
-           isOneOp_out:      out STD_LOGIC
+           isOneOp_out:      out STD_LOGIC;
+           memReadSig_in:      IN STD_LOGIC;
+           memReadSig_out:      out STD_LOGIC
+           
 
            );
 end ID_EX;
@@ -47,6 +50,7 @@ begin
             instruction_out <= instruction;
             Rdest_out <= Rdest_in;
             isOneOp_out <= isOneOp;
+            memReadSig_out <= memReadSig_in;
         end if;
     end process;
 end Behavioral;

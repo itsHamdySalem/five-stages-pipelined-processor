@@ -95,7 +95,7 @@ BEGIN
                     MemOp <= '1';
                     regWrite <= '1';
                     pcSrc <= '0';
-                    memRead <= '0';
+                    memRead <= '1';
                     memWrite <= '0';
                     memToReg <= '1';
                     spInc <= '0';

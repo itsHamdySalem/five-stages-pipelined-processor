@@ -30,14 +30,16 @@ Architecture Processor_design of Processor is
     spIncSig_D,    
     spDecSig_D,
     isOneOp_D,
-    isOneOp_ID_EX : STD_LOGIC;
+    isOneOp_ID_EX,
+    memReadSig_ID_EX,
+    memReadSig_EX,memReadSig_EX_Mem : STD_LOGIC;
     signal RDest_D : std_logic_vector(2 DOWNTO 0);
-    signal instruction_D, instruction_ID_EX: std_logic_vector(15 DOWNTO 0);
-    signal instruction_F, immediate_F : std_logic_vector(15 DOWNTO 0);
+    signal instruction_D, instruction_ID_EX, instruction_EX,instruction_EX_Mem: std_logic_vector(15 DOWNTO 0);
+    signal readData_Mem, instruction_F, immediate_F : std_logic_vector(15 DOWNTO 0);
 
 
-    signal memAddress_ID_EX : STD_LOGIC_VECTOR(31 downto 0);
-    signal Rdst_sel_ID_EX: std_logic_vector(2 DOWNTO 0);
+    signal memAddress_ID_EX,memAddress_EX,memAddress_EX_Mem : STD_LOGIC_VECTOR(31 downto 0);
+    signal Rdst_sel_ID_EX,Rdst_sel_EX,Rdst_sel_EX_Mem,Rdst_sel_Mem: std_logic_vector(2 DOWNTO 0);
     signal immediate_out_ID_EX, Rsrc1_ID_EX, Rsrc2_ID_EX, Rdest_ID_EX : std_logic_vector(31 DOWNTO 0);
     signal isImmediate_ID_EX : std_logic;
     signal ALU_OP_ID_EX : std_logic_vector(4 DOWNTO 0);
@@ -45,7 +47,7 @@ Architecture Processor_design of Processor is
 
     signal willBranch_EX : std_logic;
     signal outFlag_EX : std_logic_vector(2 DOWNTO 0);
-    signal Alu_Out_EX : std_logic_vector(31 downto 0);
+    signal Alu_Out_EX,Alu_Out_EX_Mem,Alu_Out_Mem : std_logic_vector(31 downto 0);
     
 
 BEGIN
@@ -102,7 +104,7 @@ BEGIN
         clk,
         reset,
         instruction_D,
-        x"00000000",
+        x"00000000", -- mem Address
         Rdest_D,
         x"00000000",
         RS1Data_D,
@@ -124,7 +126,9 @@ BEGIN
         Mem_control_out_ID_EX,
         WB_control_out_ID_EX,
         instruction_ID_EX,
-        isOneOp_ID_EX
+        isOneOp_ID_EX,
+        memReadSig_D,
+        memReadSig_ID_EX
     );
 
     EXInstance: entity work.ExecutionStage port map(
@@ -139,8 +143,47 @@ BEGIN
         immediate_out_ID_EX,
         willBranch_EX,
         outFlag_EX,
-        Alu_Out_EX
+        Alu_Out_EX,
+        memReadSig_ID_EX,
+        memReadSig_EX,
+        instruction_EX,
+        Rdst_sel_ID_EX,
+        Rdst_sel_EX,
+        memAddress_ID_EX,
+        memAddress_EX
     );
+
+    EX_MemInstance: entity work.EX_Mem port map(
+        clk,
+        reset,
+        instruction_EX,
+        Rdst_sel_EX,
+        memAddress_EX,
+        instruction_EX_Mem,
+        memAddress_EX_Mem,
+        Rdst_sel_EX_Mem,
+        memReadSig_EX,
+        memReadSig_EX_Mem,
+        Alu_Out_EX,
+        Alu_Out_EX_Mem
+    );
+    
+    MemInstance: entity work.memoryStage port map(
+        clk,
+        reset,
+        instruction_EX_Mem,
+        Alu_Out_EX_Mem,
+        memAddress_EX_Mem,
+        memReadSig_EX_Mem,
+        '0',
+        '0',
+        x"0000",
+        Rdst_sel_EX_Mem,
+        readData_Mem,
+        Alu_Out_Mem,
+        Rdst_sel_Mem
+    );
+
     
 END Processor_design;
 
