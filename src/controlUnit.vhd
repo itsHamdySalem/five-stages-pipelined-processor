@@ -16,7 +16,8 @@ PORT(
     memWrite:     OUT STD_LOGIC;
     memToReg:     OUT STD_LOGIC;
     spInc:        OUT STD_LOGIC;
-    spDec:        OUT STD_LOGIC
+    spDec:        OUT STD_LOGIC;
+    isOneOp:      OUT STD_LOGIC
 );
 END controlUnit;
 
@@ -24,7 +25,6 @@ ARCHITECTURE controlUnitDesign OF controlUnit IS
 BEGIN
     PROCESS(clk)
     BEGIN
-        IF rising_edge(clk) THEN
             -- Extract opcode from instruction
             CASE instruction(15 DOWNTO 11) IS
                 WHEN "00001" =>
@@ -40,6 +40,7 @@ BEGIN
                     memToReg <= '0';
                     spInc <= '0';
                     spDec <= '0';
+                    isOneOp <= '1';
                     
                 WHEN "00100" =>
                     -- DEC instruction
@@ -54,6 +55,7 @@ BEGIN
                     memToReg <= '0';
                     spInc <= '0';
                     spDec <= '0';
+                    isOneOp <= '1';
                     
                 WHEN "10011" =>
                     -- OR instruction
@@ -68,6 +70,7 @@ BEGIN
                     memToReg <= '0';
                     spInc <= '0';
                     spDec <= '0';
+                    isOneOp <= '0';
                     
                 WHEN "01101" =>
                     -- OUT instruction
@@ -82,6 +85,7 @@ BEGIN
                     memToReg <= '0';
                     spInc <= '0';
                     spDec <= '0';
+                    isOneOp <= '1';
                     
                 WHEN "11010" =>
                     -- LDD instruction
@@ -96,6 +100,7 @@ BEGIN
                     memToReg <= '1';
                     spInc <= '0';
                     spDec <= '0';
+                    isOneOp <= '0';
                     
                 WHEN "00111" =>
                     -- PROTECT instruction
@@ -110,6 +115,7 @@ BEGIN
                     memToReg <= '0';
                     spInc <= '0';
                     spDec <= '0';
+                    isOneOp <= '0';
                     
                 WHEN OTHERS =>
                     -- Default case for unsupported opcode
@@ -124,7 +130,7 @@ BEGIN
                     memToReg <= '0';
                     spInc <= '0';
                     spDec <= '0';
+                    isOneOp <= '0';
             END CASE;
-        END IF;
     END PROCESS;
 END controlUnitDesign;

@@ -21,9 +21,7 @@ COMPONENT instructionMem IS
         rst :               IN std_logic;
         readAddress :    	IN std_logic_vector(11 DOWNTO 0);
         instruction :       OUT std_logic_vector(15 DOWNTO 0); 
-        immediate :         OUT std_logic_vector(15 DOWNTO 0);
-        memZero:            OUT std_logic_vector(15 DOWNTO 0);
-        memOne:            OUT std_logic_vector(15 DOWNTO 0)
+        immediate :         OUT std_logic_vector(15 DOWNTO 0)
     );
 END COMPONENT;
 
@@ -33,8 +31,7 @@ COMPONENT PC IS
         inc : IN std_logic_vector(15 DOWNTO 0);
         pcSel : IN std_logic;
         pcData : IN std_logic_vector(15 DOWNTO 0);
-        pc : OUT std_logic_vector(15 DOWNTO 0);
-        memZero: IN std_logic_vector(15 DOWNTO 0)
+        pc : OUT std_logic_vector(15 DOWNTO 0)
     );
 END COMPONENT;
 
@@ -42,13 +39,12 @@ END COMPONENT;
 signal pcOutput:                            std_logic_vector(15 DOWNTO 0);
 signal increment:                           std_logic_vector(15 DOWNTO 0);
 signal outInstruction:                      std_logic_vector(15 DOWNTO 0);
-signal memZero:                            std_logic_vector(15 DOWNTO 0);
 signal isImmediate:                         std_logic;
 
 BEGIN
-    
-    pcc:            entity work.PC port map(clk, reset, enable, increment, pcSel, pcData, pcOutput, memZero);
-    instructions:   entity work.instructionMem port map(clk, reset, pcOutput(11 downto 0), outInstruction,immediate,memZero,memOne);
+
+    pcc:            entity work.PC port map(clk, reset, enable, increment, pcSel, pcData, pcOutput);
+    instructions:   entity work.instructionMem port map(clk, reset, pcOutput(11 downto 0), outInstruction,immediate);
     isImmediate <= outInstruction(10);
     instruction <= outInstruction;
 

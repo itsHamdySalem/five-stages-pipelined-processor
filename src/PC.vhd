@@ -8,8 +8,7 @@ ENTITY PC IS
         inc : IN std_logic_vector(15 DOWNTO 0);
         pcSel : IN std_logic;
         pcData : IN std_logic_vector(15 DOWNTO 0);
-        pc : OUT std_logic_vector(15 DOWNTO 0);
-        memZero: IN std_logic_vector(15 DOWNTO 0)
+        pc : OUT std_logic_vector(15 DOWNTO 0)
     );
 END PC;
 

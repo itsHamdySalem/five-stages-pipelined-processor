@@ -1,10 +1,8 @@
-LIBRARY ieee;
-use IEEE.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.numeric_std.all;
-use ieee.std_logic_textio.all;
-use std.textio.all;
 
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.numeric_std.all;
+use ieee.std_logic_unsigned.all;
 
 entity AluEnt is 
 port(
@@ -12,7 +10,8 @@ A,B: in std_logic_vector (31 downto 0) ;
 S: in std_logic_vector(4 downto 0);
 In_Flags:in std_logic_vector(2 downto 0);
 Out_Flags:out std_logic_vector(2 downto 0) ;
-F : out std_logic_vector(31 downto 0));
+F : out std_logic_vector(31 DOWNTO 0)
+);
 end entity AluEnt;
 
 architecture AluArch of AluEnt is 

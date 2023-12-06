@@ -9,7 +9,9 @@ PORT(
     clk, reset :                    IN  std_logic; 
     instruction:          IN  std_logic_vector(15 DOWNTO 0);
 
-    RS1,RS2,Rdest:                        OUT std_logic_vector(2 DOWNTO 0)
+    RS1,RS2,Rdest:                        OUT std_logic_vector(2 DOWNTO 0);
+    instruction_out:          OUT  std_logic_vector(15 DOWNTO 0)
+
 );
 END IF_ID;
 
@@ -19,9 +21,10 @@ PROCESS (clk, reset)
 BEGIN
 
     IF rising_edge(clk) THEN
-        RS1 <= instruction(6 DOWNTO 4);
-        RS2 <= instruction(3 DOWNTO 1);
-        Rdest <= instruction(9 DOWNTO 7);
+        RS1 <= instruction(7 DOWNTO 5);
+        RS2 <= instruction(4 DOWNTO 2);
+        Rdest <= instruction(10 DOWNTO 8);
+        instruction_out <= instruction;
     END IF;
 END PROCESS;
 END IF_ID_Design;

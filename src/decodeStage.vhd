@@ -23,7 +23,10 @@ ENTITY DecodingStage IS
         memWrite:           OUT STD_LOGIC;
         memToReg:           OUT STD_LOGIC;
         spInc:              OUT STD_LOGIC;
-        spDec:              OUT STD_LOGIC
+        spDec:              OUT STD_LOGIC;
+        isOneOp:            OUT STD_LOGIC;
+        Rdest_out :    	        OUT std_logic_vector(2 DOWNTO 0);
+        instruction_out:      OUT std_logic_vector(15 DOWNTO 0)
     );
 END ENTITY DecodingStage;
 
@@ -33,7 +36,14 @@ BEGIN
 
     -- RS1_or_RD <= RD when pcSrc = '1' and memRead = '0' else RS1;
 
-    ControlU : entity work.ControlUnit port map(clk, instruction, Imm, InOp, OutOp, MemOp, regWrite, pcSrc, memRead, memWrite, memToReg, spInc, spDec);
+    ControlU : entity work.ControlUnit port map(clk, instruction, Imm, InOp, OutOp, MemOp, regWrite, pcSrc, memRead, memWrite, memToReg, spInc, spDec, isOneOp);
     regFile: entity work.RegistersFile port map(clk, rst, RS1, RS2, Rdest, '0', "000", X"00000000", RS1Data, RS2Data, RdstData); -- RS1 and RS2 check themmm! 
+    -- PROCESS (clk, rst)
+    -- BEGIN
+    --     IF falling_edge(clk) THEN
+            Rdest_out <= Rdest;
+    --     END IF;
+    -- END PROCESS;
     
+    instruction_out <= instruction;
 END decoding;
