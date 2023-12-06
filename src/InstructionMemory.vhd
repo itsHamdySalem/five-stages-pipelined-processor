@@ -21,9 +21,9 @@ BEGIN
     PROCESS (clk, rst)
 
     BEGIN
-    ram(0) <= "1101000100000000";  -- LDD instruction
+    ram(0) <= "1101000000000000";  -- LDD instruction
     ram(1) <= "0010001000001000";  -- DEC instruction
-    ram(2) <= "1001101100001101";  -- OR instruction
+    ram(3) <= "1001101100001101";  -- OR instruction
     
 
     IF rising_edge(clk) THEN

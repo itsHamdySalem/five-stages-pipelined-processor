@@ -26,8 +26,9 @@ entity ID_EX is
            instruction_out: out STD_LOGIC_VECTOR(15 downto 0);
            isOneOp_out:      out STD_LOGIC;
            memReadSig_in:      IN STD_LOGIC;
-           memReadSig_out:      out STD_LOGIC
-           
+           memReadSig_out:      out STD_LOGIC;
+           regWriteSig_in:      IN STD_LOGIC;
+           regWriteSig_out:      out STD_LOGIC
 
            );
 end ID_EX;
@@ -51,6 +52,7 @@ begin
             Rdest_out <= Rdest_in;
             isOneOp_out <= isOneOp;
             memReadSig_out <= memReadSig_in;
+            regWriteSig_out <= regWriteSig_in;
         end if;
     end process;
 end Behavioral;
