@@ -12,12 +12,16 @@ ENTITY memoryStage IS
         dataReadEnable :           IN STD_LOGIC;
         dataWriteEnable :           IN STD_LOGIC;
         protectEnable:        IN std_logic;
-        writeData:          in std_logic_vector(15 downto 0);
+        writeData:          in std_logic_vector(31 downto 0);
         RDst :          IN std_logic_vector(2 DOWNTO 0);
-        readData:           out std_logic_vector(15 downto 0);
+        readData:           out std_logic_vector(31 downto 0);
         aluOut_out:        out std_logic_vector(31 downto 0);
-        RDst_Sel :          OUT std_logic_vector(2 DOWNTO 0)
-    );
+        RDst_Sel :          OUT std_logic_vector(2 DOWNTO 0);
+        dataReadEnable_out :           OUT STD_LOGIC;
+        regWriteSig_in:      IN STD_LOGIC;
+        regWriteSig_out:      out STD_LOGIC
+
+        );
 END ENTITY memoryStage;
 
 ARCHITECTURE execution OF memoryStage  IS
@@ -41,6 +45,7 @@ BEGIN
 
     RDst_Sel <= RDst;
     aluOut_out <= aluOut;
-
+    dataReadEnable_out <= dataReadEnable;
+    regWriteSig_out <= regWriteSig_in;
 
 END execution;

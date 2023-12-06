@@ -10,15 +10,15 @@ entity dataMem is
         readEnable:         in std_logic;
         writeAddress:       in std_logic_vector(11 downto 0);
         writeEnable:        in std_logic;
-        writeData:          in std_logic_vector(15 downto 0);
-        readData:           out std_logic_vector(15 downto 0);
+        writeData:          in std_logic_vector(31 downto 0);
+        readData:           out std_logic_vector(31 downto 0);
         protectAddress:     in std_logic_vector(11 downto 0); -- New input for protecting a cell
         protectEnable:      in std_logic                    -- New input for protecting a cell
     );
 end entity;
 
 architecture dataMemDesign of dataMem is
-    type ram_type is array(0 to 2**12 - 1) of std_logic_vector(15 downto 0);
+    type ram_type is array(0 to 2**12 - 1) of std_logic_vector(31 downto 0);
     signal ram: ram_type;
     type ram_protected_type is array(0 to 2**12 - 1) of std_logic;
     signal ram_protected: ram_protected_type;
@@ -27,10 +27,10 @@ begin
 
     process(clk, rst)
     begin    
-        ram(0) <= x"00F1";
-        ram(1) <= x"00F2";
-        ram(2) <= x"00F3";
-        ram(3) <= x"00F4";
+        ram(0) <= x"000000F1";
+        ram(1) <= x"000000F2";
+        ram(2) <= x"000000F3";
+        ram(3) <= x"000000F4";
         if rst = '1' then
             ram <= (others => (others => '0'));
             ram_protected <= (others => '0');

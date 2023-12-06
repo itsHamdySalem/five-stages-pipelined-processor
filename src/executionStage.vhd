@@ -22,8 +22,10 @@ ENTITY ExecutionStage IS
         Rdst_sel_in : IN STD_LOGIC_VECTOR(2 downto 0);
         Rdst_sel_out : out STD_LOGIC_VECTOR(2 downto 0);
         MemAdr : in STD_LOGIC_VECTOR(31 downto 0);
-        MemAdr_out : out STD_LOGIC_VECTOR(31 downto 0)
+        MemAdr_out : out STD_LOGIC_VECTOR(31 downto 0);
 
+        regWriteSig_in:      IN STD_LOGIC;
+        regWriteSig_out:      out STD_LOGIC
 
     );
 END ENTITY ExecutionStage;
@@ -54,5 +56,7 @@ BEGIN
 
     Rdst_sel_out <= Rdst_sel_in;
     MemAdr_out <= MemAdr;
+
+    regWriteSig_out <= regWriteSig_in;
 
 END execution;

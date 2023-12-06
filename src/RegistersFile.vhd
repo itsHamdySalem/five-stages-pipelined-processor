@@ -14,7 +14,9 @@ entity RegistersFile is
 
            Rsrc1 : out STD_LOGIC_VECTOR(31 downto 0);
            Rsrc2 : out STD_LOGIC_VECTOR(31 downto 0);
-           Rdst : out STD_LOGIC_VECTOR(31 downto 0)
+           Rdst : out STD_LOGIC_VECTOR(31 downto 0);
+           R0,R1,R2,R3,R4,R5,R6,R7: OUT std_logic_vector(31 DOWNTO 0)
+
     );
 end RegistersFile;
 
@@ -24,14 +26,6 @@ architecture Behavioral of RegistersFile is
 begin
     process(clk, rst)
     begin
-        R(0) <= "00000000000000000000000000000001";
-        R(1) <= "00000000000000000000000000000010";
-        R(2) <= "00000000000000000000000000000100";
-        R(3) <= "00000000000000000000000000001000";
-        R(4) <= "00000000000000000000000000010000";
-        R(5) <= "00000000000000000000000000100000";
-        R(6) <= "00000000000000000000000001000000";
-        R(7) <= "00000000000000000000000010000000";
         if rst = '1' then
             R <= (others => (others => '0'));   
         elsif falling_edge(clk) then
@@ -43,4 +37,12 @@ begin
     Rsrc1 <= R(to_integer(unsigned(Rsrc1_sel)));
     Rsrc2 <= R(to_integer(unsigned(Rsrc2_sel)));
     Rdst <= R(to_integer(unsigned(Rdst_sel)));
+    R0 <= R(0);
+    R1 <= R(1);
+    R2 <= R(2);
+    R3 <= R(3);
+    R4 <= R(4);
+    R5 <= R(5);
+    R6 <= R(6);
+    R7 <= R(7);
 end Behavioral;
