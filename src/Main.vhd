@@ -62,6 +62,8 @@ Architecture Processor_design of Processor is
 
     signal OutReg: STD_LOGIC_VECTOR(31 downto 0);
 
+    signal Z, N, C : STD_LOGIC;
+
 BEGIN
     fetchStageInstance: entity work.fetchStage port map(
         clk,
@@ -170,7 +172,8 @@ BEGIN
         memAddress_ID_EX,
         memAddress_EX,
         regWriteSig_ID_EX,
-        regWriteSig_EX
+        regWriteSig_EX,
+        Z,N,C
     );
 
     EX_MemInstance: entity work.EX_Mem port map(

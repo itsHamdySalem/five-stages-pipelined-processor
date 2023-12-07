@@ -25,7 +25,8 @@ ENTITY ExecutionStage IS
         MemAdr_out : out STD_LOGIC_VECTOR(31 downto 0);
 
         regWriteSig_in:      IN STD_LOGIC;
-        regWriteSig_out:      out STD_LOGIC
+        regWriteSig_out:      out STD_LOGIC;
+        Z,N,C:              out std_logic
 
     );
 END ENTITY ExecutionStage;
@@ -59,4 +60,7 @@ BEGIN
 
     regWriteSig_out <= regWriteSig_in;
 
+    Z <= outFlag_temp(0);
+    N <= outFlag_temp(1);
+    C <= outFlag_temp(2);
 END execution;

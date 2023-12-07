@@ -21,19 +21,24 @@ BEGIN
     PROCESS (clk, rst)
 
     BEGIN
-    ram(0) <= "1101000000000000";  -- LDD instruction
-    ram(1) <= "0000000000000001";  -- Imm
-    ram(2) <= "0010001000001000";  -- DEC instruction
-    ram(3) <= "0010001000001000";  -- DEC instruction
-    ram(4) <= "0010001000001000";  -- DEC instruction
-    ram(5) <= "1001101100001101";  -- OR instruction
-    ram(6) <= "0110100000000000";  -- OUT instruction
-    ram(7) <= "1101000000000000";  -- LDD instruction
-    ram(8) <= "0000000000000001";  -- Imm
-    ram(9) <= "0010001000001000";  -- DEC instruction
-    ram(10) <= "0010001000001000";  -- DEC instruction
-    ram(11) <= "0010001000001000";  -- DEC instruction
-    ram(12) <= "1001101100001101";  -- OR instruction
+
+    -- ram(0) <= "1101000000000000";  -- LDD instruction
+    -- ram(1) <= "0000000000000001";  -- Imm
+    -- ram(2) <= "0010001000001000";  -- DEC instruction
+    -- ram(3) <= "0010001000001000";  -- DEC instruction
+    -- ram(4) <= "0010001000001000";  -- DEC instruction
+    -- ram(5) <= "1001101100001101";  -- OR instruction
+    -- ram(6) <= "0110100000000000";  -- OUT instruction
+    -- ram(7) <= "1101000000000000";  -- LDD instruction
+    -- ram(8) <= "0000000000000001";  -- Imm
+    -- ram(9) <= "0010001000001000";  -- DEC instruction
+    -- ram(10) <= "0010001000001000";  -- DEC instruction
+    -- ram(11) <= "0010001000001000";  -- DEC instruction
+    -- ram(12) <= "1001101100001101";  -- OR instruction
+ 
+    ram(0) <= "1001101100001101";  -- OR instruction
+    ram(1) <= "0010001000001000";  -- DEC instruction
+    ram(2) <= "1001101000001000";  -- OR instruction
 
 
     IF rising_edge(clk) THEN
