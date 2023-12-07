@@ -15,6 +15,9 @@ entity ID_EX is
            Mem_control_in : in STD_LOGIC_VECTOR(2 downto 0);
            WB_control_in : in STD_LOGIC_VECTOR(2 downto 0);
            isOneOp:      in STD_LOGIC;
+           memReadSig_in:      IN STD_LOGIC;
+           regWriteSig_in:      IN STD_LOGIC;
+
            MemAdr : out STD_LOGIC_VECTOR(31 downto 0);
            Rdst_sel_out : out STD_LOGIC_VECTOR(2 downto 0);
            immediate_out : out STD_LOGIC_VECTOR(31 downto 0);
@@ -25,9 +28,7 @@ entity ID_EX is
            WB_control_out : out STD_LOGIC_VECTOR(2 downto 0);
            instruction_out: out STD_LOGIC_VECTOR(15 downto 0);
            isOneOp_out:      out STD_LOGIC;
-           memReadSig_in:      IN STD_LOGIC;
            memReadSig_out:      out STD_LOGIC;
-           regWriteSig_in:      IN STD_LOGIC;
            regWriteSig_out:      out STD_LOGIC
 
            );
