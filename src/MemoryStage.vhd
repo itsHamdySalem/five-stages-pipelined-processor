@@ -11,7 +11,6 @@ ENTITY memoryStage IS
         memAddress:        in std_logic_vector(31 downto 0);
         dataReadEnable :           IN STD_LOGIC;
         dataWriteEnable :           IN STD_LOGIC;
-        protectEnable:        IN std_logic;
         writeData:          in std_logic_vector(31 downto 0);
         RDst :          IN std_logic_vector(2 DOWNTO 0);
         readData:           out std_logic_vector(31 downto 0);
@@ -19,18 +18,16 @@ ENTITY memoryStage IS
         RDst_Sel :          OUT std_logic_vector(2 DOWNTO 0);
         dataReadEnable_out :           OUT STD_LOGIC;
         regWriteSig_in:      IN STD_LOGIC;
-        regWriteSig_out:      out STD_LOGIC
-
+        regWriteSig_out:      out STD_LOGIC;
+        instruction_Mem:     out std_logic_vector(15 DOWNTO 0)
         );
 END ENTITY memoryStage;
 
 ARCHITECTURE execution OF memoryStage  IS
-signal isOutOp:                std_logic;
 
-
+signal protectEnable: STD_LOGIC;
 BEGIN
-
-    isOutOp <= '1' when instruction(15 DOWNTO 11) = "01101" else '0';
+    protectEnable <= '1' when instruction(15 DOWNTO 11) = "00111" else '0';
 
     MemoryInstance : entity work.dataMem port map(clk, rst,
         memAddress(11 DOWNTO 0),
@@ -47,5 +44,5 @@ BEGIN
     aluOut_out <= aluOut;
     dataReadEnable_out <= dataReadEnable;
     regWriteSig_out <= regWriteSig_in;
-
+    instruction_Mem <= instruction;
 END execution;

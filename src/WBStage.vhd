@@ -14,11 +14,13 @@ ENTITY WBStage IS
 
         writeRegisterEnable: OUT std_logic;
         writeRegisterSel_D: OUT std_logic_vector(2 DOWNTO 0);
-        writeRegisterData_D: OUT std_logic_vector(31 DOWNTO 0)
+        writeRegisterData_D: OUT std_logic_vector(31 DOWNTO 0);
+        instruction: IN std_logic_vector(15 DOWNTO 0);
+        InReg: IN std_logic_vector(31 DOWNTO 0);
+        OutReg: OUT std_logic_vector(31 DOWNTO 0)
 
     );
 END ENTITY WBStage;
-
 ARCHITECTURE execution OF WBStage  IS
 BEGIN
     writeRegisterEnable <= '1' when regWriteSig_in='1'
@@ -29,4 +31,5 @@ BEGIN
     writeRegisterData_D <= readData when memReadSig_in='1'
     else ALU_out;
 
+    OutReg <= ALU_out when instruction(15 DOWNTO 11) = "01101" else InReg;
 END execution;
