@@ -152,8 +152,6 @@ with open(input_file_path, "r") as input_file, open(output_file_path, "w") as ou
         if not segments:
             continue
 
-        # print(segments)
-
         opcode = segments[0]
         machine_codes = None
 
@@ -175,7 +173,7 @@ with open(input_file_path, "r") as input_file, open(output_file_path, "w") as ou
             raise ValueError(f"Unknown opcode: {opcode}")
 
         for machine_code in machine_codes:
-            print(f"{machine_code:016b}")
-            output_file.write(f"{machine_code:016b}\n")
+            print(f"{int(machine_code & 0xFFFF):016b}")
+            output_file.write(f"{int(machine_code & 0xFFFF):016b}\n")
 
 print(f"Conversion completed. Machine code written to {output_file_path}.")
