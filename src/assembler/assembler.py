@@ -132,7 +132,7 @@ def assemble_effective_address_instruction(opcode, Rd, EA):
     opcode_value = effective_address_instructions[opcode]
 
     machine_code1 = (opcode_value << OPCODE_SHIFT) | (
-        Rd_value << RD_SHIFT) | (EA >> 16)
+        Rd_value << RD_SHIFT) | ((EA & 0xF0000) >> 16)
     machine_code2 = EA
     return [machine_code1, machine_code2]
 
