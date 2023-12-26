@@ -16,9 +16,9 @@ entity EX_Mem is
            Aluin : in STD_LOGIC_VECTOR(31 downto 0);
            Aluout : out STD_LOGIC_VECTOR(31 downto 0);
            regWriteSig_in:      IN STD_LOGIC;
-           regWriteSig_out:      out STD_LOGIC
-   
-
+           regWriteSig_out:      out STD_LOGIC;
+           spIncIn,spDecIn:              in std_logic;
+           spIncOut, spDecOut:              out std_logic
            );
 end EX_Mem;
 
@@ -34,6 +34,8 @@ begin
             memReadSig_out <= memReadSig_in;
             Aluout <= Aluin;
             regWriteSig_out <=regWriteSig_in;
+            spDecOut <= spDecIn;
+            spIncOut <= spIncIn;        
         end if;
     end process;
 end Behavioral;
