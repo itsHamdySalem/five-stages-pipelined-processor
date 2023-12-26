@@ -48,8 +48,7 @@ BEGIN
     isImmediate <= outInstruction(10);
     instruction <= outInstruction;
 
-    increment <= x"0002" when isImmediate='1'
-                         else x"0001";
+    increment <= x"0001";
     pcOut <= pcOutput;
 
 END fetchStageDesign;

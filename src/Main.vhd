@@ -39,7 +39,7 @@ Architecture Processor_design of Processor is
     memReadSig_ID_EX,
     memReadSig_EX,memReadSig_EX_Mem,memReadSig_Mem,memReadSig_Mem_WB : STD_LOGIC;
     signal RDest_D : std_logic_vector(2 DOWNTO 0);
-    signal instruction_D, instruction_ID_EX, instruction_EX,instruction_EX_Mem: std_logic_vector(15 DOWNTO 0);
+    signal instruction_D, instruction_ID_EX, instruction_EX,instruction_EX_Mem,instruction_Mem,instruction_Mem_WB: std_logic_vector(15 DOWNTO 0);
     signal instruction_F, immediate_F : std_logic_vector(15 DOWNTO 0);
     signal readData_Mem,readData_Mem_WB : std_logic_vector(31 DOWNTO 0);
 
@@ -59,6 +59,10 @@ Architecture Processor_design of Processor is
     signal writeRegisterData_D: std_logic_vector(31 downto 0);
 
     signal R0,R1,R2,R3,R4,R5,R6,R7: STD_LOGIC_VECTOR(31 downto 0);
+
+    signal OutReg: STD_LOGIC_VECTOR(31 downto 0);
+
+    signal Z, N, C : STD_LOGIC;
 
 BEGIN
     fetchStageInstance: entity work.fetchStage port map(
@@ -124,7 +128,7 @@ BEGIN
         RS1Data_D,
         RS2Data_D,
         RDestData_D,
-        '0',
+        ImmSig_D,
         instruction_D(15 DOWNTO 11),
         "000",
         "000",
@@ -168,7 +172,8 @@ BEGIN
         memAddress_ID_EX,
         memAddress_EX,
         regWriteSig_ID_EX,
-        regWriteSig_EX
+        regWriteSig_EX,
+        Z,N,C
     );
 
     EX_MemInstance: entity work.EX_Mem port map(
@@ -196,7 +201,6 @@ BEGIN
         memAddress_EX_Mem,
         memReadSig_EX_Mem,
         '0',
-        '0',
         x"00000000",
         Rdst_sel_EX_Mem,
         readData_Mem,
@@ -204,7 +208,8 @@ BEGIN
         Rdst_sel_Mem,
         memReadSig_Mem,
         regWriteSig_EX_Mem,
-        regWriteSig_Mem
+        regWriteSig_Mem,
+        instruction_Mem
     );
 
     Mem_WBInstance: entity work.Mem_WB port map(
@@ -219,7 +224,9 @@ BEGIN
         memReadSig_Mem,
         memReadSig_Mem_WB,
         regWriteSig_Mem,
-        regWriteSig_Mem_WB
+        regWriteSig_Mem_WB,
+        instruction_Mem,
+        instruction_Mem_WB
     );
 
     WBInstance: entity work.WBStage port map(
@@ -232,7 +239,10 @@ BEGIN
         memReadSig_Mem_WB,
         writeRegisterEnable_D,
         writeRegisterSel_D,
-        writeRegisterData_D
+        writeRegisterData_D,
+        instruction_Mem_WB,
+        OutReg,
+        OutReg
     );
 
 

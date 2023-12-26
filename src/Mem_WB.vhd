@@ -19,7 +19,10 @@ PORT(
     dataReadEnable:     in std_logic;
     dataReadEnable_out:     out std_logic;
     regWriteSig_in:      IN STD_LOGIC;
-    regWriteSig_out:      out STD_LOGIC
+    regWriteSig_out:      out STD_LOGIC;
+    instructionI:           in std_logic_vector(15 downto 0);
+    instructionO:           out std_logic_vector(15 downto 0)
+
 
 );
 END Mem_WB;
@@ -34,6 +37,7 @@ BEGIN
     readData_out <= readData;
     dataReadEnable_out <= dataReadEnable;
     regWriteSig_out <= regWriteSig_in;
+    instructionO <= instructionI;
     END IF;
 END PROCESS;
 END Mem_WB_Design;
