@@ -28,7 +28,12 @@ entity ID_EX is
            memReadSig_in:      IN STD_LOGIC;
            memReadSig_out:      out STD_LOGIC;
            regWriteSig_in:      IN STD_LOGIC;
-           regWriteSig_out:      out STD_LOGIC
+           regWriteSig_out:      out STD_LOGIC;
+           SP_INC_IN:  IN STD_LOGIC;
+           SP_INC_OUT:  OUT STD_LOGIC;
+           SP_DEC_IN:  IN STD_LOGIC;
+           SP_DEC_OUT:  OUT STD_LOGIC
+           
 
            );
 end ID_EX;
@@ -49,6 +54,8 @@ architecture Behavioral of ID_EX is
 
     signal imm1: std_logic := '0';
     signal imm2: std_logic := '0';
+
+    signal SP_DEC_IN_sig, SP_INC_IN_sig: STD_LOGIC := '0';
 
 begin
     process(clk, rst) -- TODO:: deal with the reset if there is any.
@@ -72,7 +79,9 @@ begin
             Rdest_out <= Rdest_in_sig;
             isOneOp_out <= isOneOp_sig;
             memReadSig_out <= memReadSig_in_sig;
-            regWriteSig_out <= regWriteSig_in_sig;            
+            regWriteSig_out <= regWriteSig_in_sig;
+            SP_INC_OUT <= SP_INC_IN_sig;
+            SP_DEC_OUT <= SP_DEC_IN_sig;
         elsIF isImmediate_In = '0' and imm1 = '0' THEN
             MemAdr <= SP_EA;
             Rdst_sel_out <= Rdst_sel_in;
@@ -88,6 +97,8 @@ begin
             isOneOp_out <= isOneOp;
             memReadSig_out <= memReadSig_in;
             regWriteSig_out <= regWriteSig_in;
+            SP_INC_OUT <= SP_INC_IN;
+            SP_DEC_OUT <= SP_DEC_IN;
         else 
             instruction_sig <= instruction;
             SP_EA_sig <= SP_EA;
@@ -101,6 +112,8 @@ begin
             isOneOp_sig <= isOneOp;
             memReadSig_in_sig <= memReadSig_in;
             regWriteSig_in_sig <= regWriteSig_in;
+            SP_INC_IN_sig <= SP_INC_IN;
+            SP_DEC_IN_sig <= SP_DEC_IN;
 
             imm1 <= '1';
             MemAdr <= (others => '0');
@@ -116,7 +129,9 @@ begin
             Rdest_out <= (others => '0');
             isOneOp_out <= '0';
             memReadSig_out <= '0';
-            regWriteSig_out <= '0';            
+            regWriteSig_out <= '0';   
+            SP_DEC_OUT <= '0';
+            SP_INC_OUT <= '0';        
             imm2 <= '1';
         END IF;
         end if;

@@ -32,7 +32,15 @@ Architecture Processor_design of Processor is
     memReadSig_D,     
     memWriteSig_D,    
     memToRegSig_D,    
-    spIncSig_D,    
+    spIncSig_D,   
+    spIncSig_ID_EX,
+    spDecSig_ID_EX, 
+    spIncSig_EX,
+    spDecSig_EX,
+    spIncSig_EX_Mem,
+    spDecSig_EX_Mem,
+    spIncSig_Mem,
+    spDecSig_Mem,
     spDecSig_D,
     isOneOp_D,
     isOneOp_ID_EX,
@@ -61,6 +69,8 @@ Architecture Processor_design of Processor is
     signal R0,R1,R2,R3,R4,R5,R6,R7: STD_LOGIC_VECTOR(31 downto 0);
 
     signal OutReg: STD_LOGIC_VECTOR(31 downto 0);
+    signal SP: STD_LOGIC_VECTOR(11 downto 0);
+    signal curData: STD_LOGIC_VECTOR(31 downto 0);
 
     signal Z, N, C : STD_LOGIC;
 
@@ -148,7 +158,11 @@ BEGIN
         memReadSig_D,
         memReadSig_ID_EX,
         regWriteSig_D,
-        regWriteSig_ID_EX
+        regWriteSig_ID_EX,
+        spIncSig_D,
+        spIncSig_ID_EX,
+        spDecSig_D,
+        spDecSig_ID_EX
     );
 
     EXInstance: entity work.ExecutionStage port map(
@@ -173,7 +187,11 @@ BEGIN
         memAddress_EX,
         regWriteSig_ID_EX,
         regWriteSig_EX,
-        Z,N,C
+        Z,N,C,
+        spIncSig_ID_EX,
+        spDecSig_ID_EX,
+        spIncSig_EX,
+        spDecSig_EX
     );
 
     EX_MemInstance: entity work.EX_Mem port map(
@@ -190,7 +208,11 @@ BEGIN
         Alu_Out_EX,
         Alu_Out_EX_Mem,
         regWriteSig_EX,
-        regWriteSig_EX_Mem
+        regWriteSig_EX_Mem,
+        spIncSig_EX,
+        spDecSig_EX,
+        spIncSig_EX_Mem,
+        spDecSig_EX_Mem
     );
     
     MemInstance: entity work.memoryStage port map(
@@ -209,7 +231,13 @@ BEGIN
         memReadSig_Mem,
         regWriteSig_EX_Mem,
         regWriteSig_Mem,
-        instruction_Mem
+        instruction_Mem,
+        spIncSig_EX_Mem,
+        spDecSig_EX_Mem,
+        spIncSig_Mem,
+        spDecSig_Mem,
+        SP,
+        curData
     );
 
     Mem_WBInstance: entity work.Mem_WB port map(

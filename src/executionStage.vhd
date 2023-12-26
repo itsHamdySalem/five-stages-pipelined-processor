@@ -26,7 +26,10 @@ ENTITY ExecutionStage IS
 
         regWriteSig_in:      IN STD_LOGIC;
         regWriteSig_out:      out STD_LOGIC;
-        Z,N,C:              out std_logic
+        Z,N,C:              out std_logic;
+        spIncIn,spDecIn:              in std_logic;
+        spIncOut,spDecOut:              out std_logic
+        
 
     );
 END ENTITY ExecutionStage;
@@ -45,13 +48,9 @@ BEGIN
 
     ALUInstance : entity work.AluEnt port map(A, B, instruction(15 downto 11), "000", outFlag_temp, F_out);
 
-    -- PROCESS (clk, rst)
-    -- BEGIN
-    --     IF falling_edge(clk) THEN
-            Alu_Out <= F_out;
-            outFlag <= outFlag_temp;
-    --     END IF;
-    -- END PROCESS;
+    Alu_Out <= F_out;
+    outFlag <= outFlag_temp;
+
     memReadSig_out <= memReadSig_in;
     instruction_out <= instruction;
 
@@ -63,4 +62,7 @@ BEGIN
     Z <= outFlag_temp(0);
     N <= outFlag_temp(1);
     C <= outFlag_temp(2);
+
+    spDecOut <= spDecIn;
+    spIncOut <= spIncIn;
 END execution;

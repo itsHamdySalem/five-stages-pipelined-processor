@@ -41,7 +41,7 @@ BEGIN
     -- ram(2) <= "1001101000001000";  -- OR instruction
 
     initialize_memory : PROCESS
-    FILE memory_file : text OPEN READ_MODE IS "tests.txt";
+    FILE memory_file : text OPEN READ_MODE IS "program.mem";
     VARIABLE file_line : line;
     VARIABLE temp_data : STD_LOGIC_VECTOR(15 DOWNTO 0);
     BEGIN
