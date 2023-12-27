@@ -17,7 +17,8 @@ ENTITY WBStage IS
         writeRegisterData_D: OUT std_logic_vector(31 DOWNTO 0);
         instruction: IN std_logic_vector(15 DOWNTO 0);
         InReg: IN std_logic_vector(31 DOWNTO 0);
-        OutReg: OUT std_logic_vector(31 DOWNTO 0)
+        OutReg: OUT std_logic_vector(31 DOWNTO 0);
+        InValue: IN std_logic_vector(31 DOWNTO 0)
 
     );
 END ENTITY WBStage;
@@ -28,7 +29,9 @@ BEGIN
 
     writeRegisterSel_D <= Rdest_Sel;
 
-    writeRegisterData_D <= readData when memReadSig_in='1'
+    writeRegisterData_D <= 
+    InValue when instruction(15 downto 11) = "01100"
+    else readData when memReadSig_in='1'
     else ALU_out;
 
     OutReg <= ALU_out when instruction(15 DOWNTO 11) = "01101" else InReg;

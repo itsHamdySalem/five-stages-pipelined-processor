@@ -73,7 +73,7 @@ ARCHITECTURE Processor_design OF Processor IS
     SIGNAL RS1_ID_EX, RS2_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
     SIGNAL Fwrd_sel1, Fwrd_sel2, zin, zout : STD_LOGIC;
     SIGNAL Fwrd_data1, Fwrd_data2, dataToWriteInMemory_EX, dataToWriteInMemory_EX_Mem : STD_LOGIC_VECTOR(31 DOWNTO 0);
-
+    SIGNAL InPortValue: STD_LOGIC_VECTOR(31 DOWNTO 0) :=  X"000000FF";
     signal cjFlush, ucjFlush, writeInMemoryEnable_EX, writeInMemoryEnable_EX_Mem : STD_LOGIC;
 
 BEGIN 
@@ -311,7 +311,8 @@ BEGIN
         writeRegisterData_D,
         instruction_Mem_WB,
         OutReg,
-        OutReg
+        OutReg,
+        InPortValue
         );
 
 END Processor_design;

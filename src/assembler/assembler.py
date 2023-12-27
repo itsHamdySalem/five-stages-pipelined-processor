@@ -207,7 +207,7 @@ def assemble_swap_instruction(opcode, Rsrc1, Rsrc2):
     return [machine_code1, machine_code2, machine_code3, machine_code4]
 
 
-input_file_path = "src/assembler/ISA.txt"
+input_file_path = "ISA.txt"
 output_file_path = "program.mem"
 
 with open(input_file_path, "r") as input_file, open(output_file_path, "w") as output_file:

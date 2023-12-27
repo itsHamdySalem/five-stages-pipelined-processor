@@ -45,6 +45,8 @@ BEGIN
         R0, R1, R2, R3, R4, R5, R6, R7);
 
     Rdest_out <= Rdest;
+
+    
     
     ucjFlush <= '1' when instruction(15 downto 11) = "01010" else '0';
     instruction_out <= instruction;
