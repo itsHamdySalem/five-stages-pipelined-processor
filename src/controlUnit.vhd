@@ -373,7 +373,7 @@ BEGIN
                 memToReg <= '0';
                 spInc <= '0';
                 spDec <= '0';
-                isOneOp <= '0';
+                isOneOp <= '1';
 
             WHEN "01100" =>
                 -- STD instruction
