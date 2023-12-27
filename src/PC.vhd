@@ -8,7 +8,9 @@ ENTITY PC IS
         inc : IN std_logic_vector(15 DOWNTO 0);
         pcSel : IN std_logic;
         pcData : IN std_logic_vector(15 DOWNTO 0);
-        pc : OUT std_logic_vector(15 DOWNTO 0)
+        pc : OUT std_logic_vector(15 DOWNTO 0);
+        pcSel2 : IN std_logic;
+        pcData2 : IN std_logic_vector(15 DOWNTO 0)        
     );
 END PC;
 
@@ -25,6 +27,8 @@ BEGIN
                 pcINC := std_logic_vector(unsigned(pc_reg) + unsigned(inc));
                 IF pcSel = '1' THEN
                     pc_reg <= pcData;
+                ELSIF pcSel2 = '1' THEN
+                    pc_reg <= pcData2;
                 ELSE
                     pc_reg <= pcINC;
                 END IF;

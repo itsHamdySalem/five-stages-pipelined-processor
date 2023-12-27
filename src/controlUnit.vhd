@@ -159,6 +159,23 @@ BEGIN
                 spInc <= '1';
                 spDec <= '0';
                 isOneOp <= '1';
+
+
+            WHEN "01110" =>
+                -- POP instruction
+                Imm <= '0';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
             WHEN OTHERS =>
                 -- Default case for unsupported opcode
                 Imm <= '0';

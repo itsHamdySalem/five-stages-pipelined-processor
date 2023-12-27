@@ -31,7 +31,11 @@ ENTITY ExecutionStage IS
         spIncOut, spDecOut : OUT STD_LOGIC;
 
         Fwrd_sel1, Fwrd_sel2 : IN STD_LOGIC;
-        Fwrd_data1, Fwrd_data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0)
+        Fwrd_data1, Fwrd_data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        PcSelect : OUT STD_LOGIC;
+        PcData : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        z_in: in std_logic
+
     );
 END ENTITY ExecutionStage;
 
@@ -40,7 +44,9 @@ ARCHITECTURE execution OF ExecutionStage IS
     SIGNAL A : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL B : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL F_out : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL outFlag_temp : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL outFlag_temp : STD_LOGIC_VECTOR(2 DOWNTO 0) := "000";
+    SIGNAL inFlag_temp : STD_LOGIC_VECTOR(2 DOWNTO 0) := "000";
+
 
 BEGIN
 
@@ -54,7 +60,7 @@ BEGIN
         RS2 WHEN isImmediate = '0' ELSE
         ImmVal;
 
-    ALUInstance : ENTITY work.AluEnt PORT MAP(A, B, instruction(15 DOWNTO 11), "000", outFlag_temp, F_out);
+    ALUInstance : ENTITY work.AluEnt PORT MAP(A, B, instruction(15 DOWNTO 11), inFlag_temp, outFlag_temp, F_out);
 
     Alu_Out <= F_out;
     outFlag <= outFlag_temp;
@@ -73,4 +79,17 @@ BEGIN
 
     spDecOut <= spDecIn;
     spIncOut <= spIncIn;
+
+    PcSelect <= '1' when instruction(15 downto 11) = "01001" and z_in = '1' else PcSelect;
+    PcData <= RS1(15 DOWNTO 0) when instruction(15 downto 11) = "01001" and z_in = '1' else PcData;
+
+    -- inFlag_temp <= outFlag_temp;
+
+    -- PROCESS (clk, rst)
+    -- BEGIN
+    --     inFlag_temp <= outFlag_temp;
+    -- END PROCESS;
+
+    
+
 END execution;

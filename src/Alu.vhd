@@ -136,7 +136,7 @@ SUB_Carry <= '1' when S = "01111" and to_integer(signed(B)) < to_integer(signed(
 DEC_Carry <= '1' when S = "00100" and to_integer(signed(A)) <= 0 else '0';
 
 ------------------ flag(0) -> Z
-Out_Flags(0) <= '1' when F_Temp =  "00000000000000000000000000000000" and S /= "11111" else '0';
+Out_Flags(0) <= '1' when F_Temp =  "00000000000000000000000000000000" and S /= "11111" else In_Flags(0);
 
 ------------------ flag(1) -> N
 Out_Flags(1) <= F_Temp(31) when S /= "11111" else In_Flags(1);

@@ -18,7 +18,9 @@ entity EX_Mem is
            regWriteSig_in:      IN STD_LOGIC;
            regWriteSig_out:      out STD_LOGIC;
            spIncIn,spDecIn:              in std_logic;
-           spIncOut, spDecOut:              out std_logic
+           spIncOut, spDecOut:              out std_logic;
+           zin: in std_logic;
+           zout: out std_logic
            );
 end EX_Mem;
 
@@ -35,7 +37,8 @@ begin
             Aluout <= Aluin;
             regWriteSig_out <=regWriteSig_in;
             spDecOut <= spDecIn;
-            spIncOut <= spIncIn;        
+            spIncOut <= spIncIn;      
+            zout <= zin;  
         end if;
     end process;
 end Behavioral;

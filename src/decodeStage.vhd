@@ -30,7 +30,9 @@ ENTITY DecodingStage IS
         WriteEnable : IN STD_LOGIC;
         WriteReg : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         WriteData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        R0, R1, R2, R3, R4, R5, R6, R7 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+        R0, R1, R2, R3, R4, R5, R6, R7 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        PcSelect : OUT STD_LOGIC;
+        PcData : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
     );
 END ENTITY DecodingStage;
 
@@ -44,4 +46,8 @@ BEGIN
     Rdest_out <= Rdest;
 
     instruction_out <= instruction;
+
+    PcSelect <= '1' when instruction(15 downto 11) = "01010" else '0';
+    PcData <= RS1Data(15 DOWNTO 0);
+
 END decoding;

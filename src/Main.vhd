@@ -8,8 +8,8 @@ ENTITY Processor IS
     );
 END ENTITY;
 ARCHITECTURE Processor_design OF Processor IS
-    SIGNAL PcSelect : STD_LOGIC;
-    SIGNAL PcData : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL PcSelect, PcSelect2 : STD_LOGIC;
+    SIGNAL PcData, PcData2 : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL pcOut, instruction_IFID : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL Rdest_IFID, RS1_IFID, RS2_IFID : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
@@ -71,7 +71,7 @@ ARCHITECTURE Processor_design OF Processor IS
     SIGNAL Z, N, C : STD_LOGIC;
 
     SIGNAL RS1_ID_EX, RS2_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
-    SIGNAL Fwrd_sel1, Fwrd_sel2 : STD_LOGIC;
+    SIGNAL Fwrd_sel1, Fwrd_sel2, zin, zout : STD_LOGIC;
     SIGNAL Fwrd_data1, Fwrd_data2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
 BEGIN
@@ -83,7 +83,9 @@ BEGIN
         PcData,
         instruction_F,
         immediate_F,
-        pcOut
+        pcOut,
+        PcSelect2,
+        PcData2
         );
 
     IF_IDInstance : ENTITY work.IF_ID PORT MAP(
@@ -123,7 +125,9 @@ BEGIN
         writeRegisterEnable_D,
         writeRegisterSel_D,
         writeRegisterData_D,
-        R0, R1, R2, R3, R4, R5, R6, R7
+        R0, R1, R2, R3, R4, R5, R6, R7,
+        PcSelect,
+        PcData
         );
 
     ID_EXInstance : ENTITY work.ID_EX PORT MAP(
@@ -211,7 +215,10 @@ BEGIN
         Fwrd_sel1,
         Fwrd_sel2,
         Fwrd_data1,
-        Fwrd_data2
+        Fwrd_data2,
+        PcSelect2,
+        PcData2,
+        zout
         );
 
     EX_MemInstance : ENTITY work.EX_Mem PORT MAP(
@@ -232,7 +239,8 @@ BEGIN
         spIncSig_EX,
         spDecSig_EX,
         spIncSig_EX_Mem,
-        spDecSig_EX_Mem
+        spDecSig_EX_Mem,
+        Z,zout
         );
 
     MemInstance : ENTITY work.memoryStage PORT MAP(

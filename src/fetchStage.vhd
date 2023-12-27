@@ -9,7 +9,8 @@ PORT(
  clk, reset, enable, pcSel:                           IN  std_logic; 
  pcData:                                              IN  std_logic_vector(15 DOWNTO 0);
  instruction,immediate,pcOut:           OUT std_logic_vector(15 DOWNTO 0);
- memOne:                               OUT std_logic_vector(15 DOWNTO 0)  
+ pcSel2:                           IN  std_logic; 
+ pcData2:                 IN  std_logic_vector(15 DOWNTO 0)
 );
 END fetchStage;
 
@@ -43,7 +44,7 @@ signal isImmediate:                         std_logic;
 
 BEGIN
 
-    pcc:            entity work.PC port map(clk, reset, enable, increment, pcSel, pcData, pcOutput);
+    pcc:            entity work.PC port map(clk, reset, enable, increment, pcSel, pcData, pcOutput, pcSel2, pcData2);
     instructions:   entity work.instructionMem port map(clk, reset, pcOutput(11 downto 0), outInstruction,immediate);
     isImmediate <= outInstruction(10);
     instruction <= outInstruction;
