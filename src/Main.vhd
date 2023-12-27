@@ -1,40 +1,36 @@
 LIBRARY IEEE;
-USE IEEE.std_logic_1164.all;
-USE IEEE.numeric_std.all;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
+ENTITY Processor IS
+    PORT (
+        clk, reset, enable : IN STD_LOGIC;
+        enableFetch : IN STD_LOGIC
+    );
+END ENTITY;
+ARCHITECTURE Processor_design OF Processor IS
+    SIGNAL PcSelect : STD_LOGIC;
+    SIGNAL PcData : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL pcOut, instruction_IFID : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL Rdest_IFID, RS1_IFID, RS2_IFID : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
-
-entity Processor is
-PORT  (
-    clk, reset, enable:    	IN std_logic;
-    enableFetch:            IN std_logic
-);
-end entity;
-
-
-Architecture Processor_design of Processor is
-    signal PcSelect:                std_logic;
-    signal PcData:                  std_logic_vector(15 downto 0);
-    signal pcOut, instruction_IFID: std_logic_vector(15 DOWNTO 0);
-    signal Rdest_IFID, RS1_IFID, RS2_IFID : std_logic_vector(2 DOWNTO 0);
-
-    signal RS1Data_D, RS2Data_D, RDestData_D : std_logic_vector(31 DOWNTO 0);
-    signal ImmSig_D,
-    InOpSig_D,        
-    OutOpSig_D,       
-    MemOpSig_D,       
+    SIGNAL RS1Data_D, RS2Data_D, RDestData_D : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL ImmSig_D,
+    InOpSig_D,
+    OutOpSig_D,
+    MemOpSig_D,
     regWriteSig_D,
     regWriteSig_ID_EX,
     regWriteSig_EX,
     regWriteSig_EX_Mem,
     regWriteSig_Mem,
     regWriteSig_Mem_WB,
-    pcSrcSig_D,    
-    memReadSig_D,     
-    memWriteSig_D,    
-    memToRegSig_D,    
-    spIncSig_D,   
+    pcSrcSig_D,
+    memReadSig_D,
+    memWriteSig_D,
+    memToRegSig_D,
+    spIncSig_D,
     spIncSig_ID_EX,
-    spDecSig_ID_EX, 
+    spDecSig_ID_EX,
     spIncSig_EX,
     spDecSig_EX,
     spIncSig_EX_Mem,
@@ -45,37 +41,41 @@ Architecture Processor_design of Processor is
     isOneOp_D,
     isOneOp_ID_EX,
     memReadSig_ID_EX,
-    memReadSig_EX,memReadSig_EX_Mem,memReadSig_Mem,memReadSig_Mem_WB : STD_LOGIC;
-    signal RDest_D : std_logic_vector(2 DOWNTO 0);
-    signal instruction_D, instruction_ID_EX, instruction_EX,instruction_EX_Mem,instruction_Mem,instruction_Mem_WB: std_logic_vector(15 DOWNTO 0);
-    signal instruction_F, immediate_F : std_logic_vector(15 DOWNTO 0);
-    signal readData_Mem,readData_Mem_WB : std_logic_vector(31 DOWNTO 0);
+    memReadSig_EX, memReadSig_EX_Mem, memReadSig_Mem, memReadSig_Mem_WB : STD_LOGIC;
+    SIGNAL RDest_D : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL instruction_D, instruction_ID_EX, instruction_EX, instruction_EX_Mem, instruction_Mem, instruction_Mem_WB : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL instruction_F, immediate_F : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL readData_Mem, readData_Mem_WB : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-    signal memAddress_ID_EX,memAddress_EX,memAddress_EX_Mem : STD_LOGIC_VECTOR(31 downto 0);
-    signal Rdst_sel_ID_EX,Rdst_sel_EX,Rdst_sel_EX_Mem,Rdst_sel_Mem,Rdst_sel_Mem_WB: std_logic_vector(2 DOWNTO 0);
-    signal immediate_out_ID_EX, Rsrc1_ID_EX, Rsrc2_ID_EX, Rdest_ID_EX : std_logic_vector(31 DOWNTO 0);
-    signal isImmediate_ID_EX : std_logic;
-    signal ALU_OP_ID_EX : std_logic_vector(4 DOWNTO 0);
-    signal Mem_control_out_ID_EX, WB_control_out_ID_EX : std_logic_vector(2 DOWNTO 0);
+    SIGNAL memAddress_ID_EX, memAddress_EX, memAddress_EX_Mem : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL Rdst_sel_ID_EX, Rdst_sel_EX, Rdst_sel_EX_Mem, Rdst_sel_Mem, Rdst_sel_Mem_WB : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL immediate_out_ID_EX, Rsrc1_ID_EX, Rsrc2_ID_EX, Rdest_ID_EX : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL isImmediate_ID_EX : STD_LOGIC;
+    SIGNAL ALU_OP_ID_EX : STD_LOGIC_VECTOR(4 DOWNTO 0);
+    SIGNAL Mem_control_out_ID_EX, WB_control_out_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
-    signal willBranch_EX : std_logic;
-    signal outFlag_EX : std_logic_vector(2 DOWNTO 0);
-    signal Alu_Out_EX,Alu_Out_EX_Mem,Alu_Out_Mem,Alu_Out_Mem_WB : std_logic_vector(31 downto 0);
-    
-    signal writeRegisterEnable_D: std_logic;
-    signal writeRegisterSel_D: std_logic_vector(2 downto 0);
-    signal writeRegisterData_D: std_logic_vector(31 downto 0);
+    SIGNAL willBranch_EX : STD_LOGIC;
+    SIGNAL outFlag_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL Alu_Out_EX, Alu_Out_EX_Mem, Alu_Out_Mem, Alu_Out_Mem_WB : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-    signal R0,R1,R2,R3,R4,R5,R6,R7: STD_LOGIC_VECTOR(31 downto 0);
+    SIGNAL writeRegisterEnable_D : STD_LOGIC;
+    SIGNAL writeRegisterSel_D : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL writeRegisterData_D : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-    signal OutReg: STD_LOGIC_VECTOR(31 downto 0);
-    signal SP: STD_LOGIC_VECTOR(11 downto 0);
-    signal curData: STD_LOGIC_VECTOR(31 downto 0);
+    SIGNAL R0, R1, R2, R3, R4, R5, R6, R7 : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-    signal Z, N, C : STD_LOGIC;
+    SIGNAL OutReg : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL SP : STD_LOGIC_VECTOR(11 DOWNTO 0);
+    SIGNAL curData : STD_LOGIC_VECTOR(31 DOWNTO 0);
+
+    SIGNAL Z, N, C : STD_LOGIC;
+
+    SIGNAL RS1_ID_EX, RS2_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL Fwrd_sel1, Fwrd_sel2 : STD_LOGIC;
+    SIGNAL Fwrd_data1, Fwrd_data2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
 BEGIN
-    fetchStageInstance: entity work.fetchStage port map(
+    fetchStageInstance : ENTITY work.fetchStage PORT MAP(
         clk,
         reset,
         enableFetch,
@@ -84,9 +84,9 @@ BEGIN
         instruction_F,
         immediate_F,
         pcOut
-    );
+        );
 
-    IF_IDInstance: entity work.IF_ID port map(
+    IF_IDInstance : ENTITY work.IF_ID PORT MAP(
         clk,
         reset,
         instruction_F,
@@ -94,10 +94,9 @@ BEGIN
         RS2_IFID,
         Rdest_IFID,
         instruction_IFID
-    );
+        );
 
-    --- cycle
-    DecodeInstance: entity work.DecodingStage port map(
+    DecodeInstance : ENTITY work.DecodingStage PORT MAP(
         clk,
         reset,
         RS1_IFID,
@@ -108,15 +107,15 @@ BEGIN
         RS2Data_D,
         RDestData_D,
         ImmSig_D,
-        InOpSig_D,        
-        OutOpSig_D,       
-        MemOpSig_D,       
-        regWriteSig_D,    
-        pcSrcSig_D,    
-        memReadSig_D,     
-        memWriteSig_D,    
-        memToRegSig_D,    
-        spIncSig_D,    
+        InOpSig_D,
+        OutOpSig_D,
+        MemOpSig_D,
+        regWriteSig_D,
+        pcSrcSig_D,
+        memReadSig_D,
+        memWriteSig_D,
+        memToRegSig_D,
+        spIncSig_D,
         spDecSig_D,
         isOneOp_D,
         Rdest_D,
@@ -124,11 +123,10 @@ BEGIN
         writeRegisterEnable_D,
         writeRegisterSel_D,
         writeRegisterData_D,
-        R0,R1,R2,R3,R4,R5,R6,R7
-    );
+        R0, R1, R2, R3, R4, R5, R6, R7
+        );
 
-    
-    ID_EXInstance: entity work.ID_EX port map(
+    ID_EXInstance : ENTITY work.ID_EX PORT MAP(
         clk,
         reset,
         instruction_D,
@@ -162,10 +160,28 @@ BEGIN
         spIncSig_D,
         spIncSig_ID_EX,
         spDecSig_D,
-        spDecSig_ID_EX
-    );
+        spDecSig_ID_EX,
+        RS1_IFID, RS2_IFID,
+        RS1_ID_EX, RS2_ID_EX
+        );
 
-    EXInstance: entity work.ExecutionStage port map(
+    ForwardingUnitInstance : ENTITY work.ForwardingUnit PORT MAP(
+        clk,
+        isOneOp_ID_EX,
+        Rdst_sel_ID_EX,
+        RS1_ID_EX,
+        RS2_ID_EX,
+        Rdst_sel_EX_Mem,
+        Rdst_sel_Mem_WB,
+        Alu_Out_EX_Mem,
+        Alu_Out_Mem_WB,
+        Fwrd_sel1,
+        Fwrd_sel2,
+        Fwrd_data1,
+        Fwrd_data2
+        );
+
+    EXInstance : ENTITY work.ExecutionStage PORT MAP(
         clk,
         reset,
         instruction_ID_EX,
@@ -187,14 +203,18 @@ BEGIN
         memAddress_EX,
         regWriteSig_ID_EX,
         regWriteSig_EX,
-        Z,N,C,
+        Z, N, C,
         spIncSig_ID_EX,
         spDecSig_ID_EX,
         spIncSig_EX,
-        spDecSig_EX
-    );
+        spDecSig_EX,
+        Fwrd_sel1,
+        Fwrd_sel2,
+        Fwrd_data1,
+        Fwrd_data2
+        );
 
-    EX_MemInstance: entity work.EX_Mem port map(
+    EX_MemInstance : ENTITY work.EX_Mem PORT MAP(
         clk,
         reset,
         instruction_EX,
@@ -213,9 +233,9 @@ BEGIN
         spDecSig_EX,
         spIncSig_EX_Mem,
         spDecSig_EX_Mem
-    );
-    
-    MemInstance: entity work.memoryStage port map(
+        );
+
+    MemInstance : ENTITY work.memoryStage PORT MAP(
         clk,
         reset,
         instruction_EX_Mem,
@@ -238,9 +258,9 @@ BEGIN
         spDecSig_Mem,
         SP,
         curData
-    );
+        );
 
-    Mem_WBInstance: entity work.Mem_WB port map(
+    Mem_WBInstance : ENTITY work.Mem_WB PORT MAP(
         clk,
         reset,
         Rdst_sel_Mem,
@@ -255,9 +275,9 @@ BEGIN
         regWriteSig_Mem_WB,
         instruction_Mem,
         instruction_Mem_WB
-    );
+        );
 
-    WBInstance: entity work.WBStage port map(
+    WBInstance : ENTITY work.WBStage PORT MAP(
         clk,
         reset,
         Rdst_sel_Mem_WB,
@@ -271,9 +291,6 @@ BEGIN
         instruction_Mem_WB,
         OutReg,
         OutReg
-    );
+        );
 
-
-    
 END Processor_design;
-
