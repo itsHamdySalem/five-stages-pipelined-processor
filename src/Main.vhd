@@ -167,6 +167,8 @@ BEGIN
 
     ForwardingUnitInstance : ENTITY work.ForwardingUnit PORT MAP(
         clk,
+        isOneOp_ID_EX,
+        Rdst_sel_ID_EX,
         RS1_ID_EX,
         RS2_ID_EX,
         Rdst_sel_EX_Mem,
