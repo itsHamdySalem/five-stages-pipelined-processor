@@ -6,7 +6,7 @@ USE IEEE.numeric_std.all;
 
 ENTITY IF_ID IS
 PORT( 
-    clk, reset :                    IN  std_logic; 
+    clk, reset, cjFlush, ucjFlush :                    IN  std_logic; 
     instruction:          IN  std_logic_vector(15 DOWNTO 0);
 
     RS1,RS2,Rdest:                        OUT std_logic_vector(2 DOWNTO 0);
@@ -20,7 +20,12 @@ BEGIN
 PROCESS (clk, reset)
 BEGIN
 
-    IF rising_edge(clk) THEN
+    if reset or cjFlush or ucjFlush then
+        RS1 <= (others => '0');
+        RS2 <= (others => '0');
+        Rdest <= (others => '0');
+        instruction_out <= (others => '0');
+    elsIF rising_edge(clk) THEN
         RS1 <= instruction(7 DOWNTO 5);
         RS2 <= instruction(4 DOWNTO 2);
         Rdest <= instruction(10 DOWNTO 8);

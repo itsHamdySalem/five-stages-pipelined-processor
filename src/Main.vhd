@@ -74,6 +74,8 @@ ARCHITECTURE Processor_design OF Processor IS
     SIGNAL Fwrd_sel1, Fwrd_sel2, zin, zout : STD_LOGIC;
     SIGNAL Fwrd_data1, Fwrd_data2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
+    signal cjFlush, ucjFlush : STD_LOGIC;
+
 BEGIN
     fetchStageInstance : ENTITY work.fetchStage PORT MAP(
         clk,
@@ -91,6 +93,8 @@ BEGIN
     IF_IDInstance : ENTITY work.IF_ID PORT MAP(
         clk,
         reset,
+        cjFlush,
+        ucjFlush,
         instruction_F,
         RS1_IFID,
         RS2_IFID,
@@ -127,7 +131,8 @@ BEGIN
         writeRegisterData_D,
         R0, R1, R2, R3, R4, R5, R6, R7,
         PcSelect,
-        PcData
+        PcData,
+        ucjFlush
         );
 
     ID_EXInstance : ENTITY work.ID_EX PORT MAP(
@@ -166,7 +171,8 @@ BEGIN
         spDecSig_D,
         spDecSig_ID_EX,
         RS1_IFID, RS2_IFID,
-        RS1_ID_EX, RS2_ID_EX
+        RS1_ID_EX, RS2_ID_EX,
+        cjFlush
         );
 
     ForwardingUnitInstance : ENTITY work.ForwardingUnit PORT MAP(
@@ -218,7 +224,8 @@ BEGIN
         Fwrd_data2,
         PcSelect2,
         PcData2,
-        zout
+        zout,
+        cjFlush
         );
 
     EX_MemInstance : ENTITY work.EX_Mem PORT MAP(

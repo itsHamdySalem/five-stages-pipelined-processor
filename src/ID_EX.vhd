@@ -35,7 +35,8 @@ ENTITY ID_EX IS
         SP_DEC_IN : IN STD_LOGIC;
         SP_DEC_OUT : OUT STD_LOGIC;
         RS1_in, RS2_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-        RS1_out, RS2_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
+        RS1_out, RS2_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        cjFlush : in STD_LOGIC
     );
 END ID_EX;
 
@@ -58,15 +59,51 @@ ARCHITECTURE Behavioral OF ID_EX IS
 
     SIGNAL SP_DEC_IN_sig, SP_INC_IN_sig : STD_LOGIC := '0';
 
-BEGIN
-    PROCESS (clk, rst) -- TODO:: deal with the reset if there is any.
-    BEGIN
-        IF rising_edge(clk) THEN
-            IF imm2 = '1' THEN
+begin
+    process(clk, rst) -- TODO:: deal with the reset if there is any.
+    begin 
+        if cjFlush = '1' then
+            MemAdr <= (others => '0');
+            Rdst_sel_out <= (others => '0');
+            immediate_out <= (others => '0');
+            Rsrc1_out <= (others => '0');
+            Rsrc2_out <= (others => '0');
+            Rdest_out <= (others => '0');
+            isImmediate <= '0';
+            ALU_OP <= (others => '0');
+            Mem_control_out <= (others => '0');
+            WB_control_out <= (others => '0');
+            instruction_out <= (others => '0');
+            isOneOp_out <= '0';
+            memReadSig_out <= '0';
+            regWriteSig_out <= '0';
+            SP_INC_OUT <= '0';
+            SP_DEC_OUT <= '0';
+            
+            instruction_sig <= (others => '0');
+            SP_EA_sig <= (others => '0');
+            Rdst_sel_in_sig <= (others => '0');
+            immediate_in_sig <= (others => '0');
+            Rsrc1_in_sig <= (others => '0');
+            isImmediate_In_sig <= '0';
+            ALU_OP_In_sig <= (others => '0');
+            Mem_control_in_sig <= (others => '0');
+            WB_control_in_sig <= (others => '0');
+            isOneOp_sig <= '0';
+            memReadSig_in_sig <= '0';
+            regWriteSig_in_sig <= '0';
+            SP_INC_IN_sig <= '0';
+            SP_DEC_IN_sig <= '0';
+
+
+
+            imm1 <= '0';
+            imm2 <= '0';
+        elsIF rising_edge(clk) THEN
+            if imm2 = '1' then
                 -- output <= prev signal
                 imm1 <= '0';
                 imm2 <= '0';
-
                 MemAdr <= x"000" & instruction_sig(7 DOWNTO 4) & instruction;
                 Rdst_sel_out <= Rdst_sel_in_sig;
                 immediate_out <= x"000" & instruction_sig(7 DOWNTO 4) & instruction;

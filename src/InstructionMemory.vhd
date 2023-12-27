@@ -2,6 +2,10 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.std_logic_textio.ALL;
 USE std.textio.ALL;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_textio.ALL;
+USE std.textio.ALL;
 USE IEEE.numeric_std.all;
 
 ENTITY instructionMem IS
@@ -17,7 +21,7 @@ END ENTITY instructionMem;
 ARCHITECTURE instructionMem_design OF instructionMem  IS 
     TYPE ram_type IS ARRAY(0 TO 2**12 - 1) OF std_logic_vector(15 DOWNTO 0);
         
-    SIGNAL ram : ram_type ; 
+    SIGNAL ram : ram_type ;
 
 BEGIN
 

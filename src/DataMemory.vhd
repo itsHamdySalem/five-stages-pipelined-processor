@@ -46,11 +46,13 @@ begin
             spINC := (others => '0');   
         elsif rising_edge(clk) then
             if inc = "001" then
-                curSP <= "111111111111";
+                -- curSP <= "111111111111";
+                curSP <= std_logic_vector(unsigned(curSP) + 1);
             elsif inc = "010" then
                 curSP <= std_logic_vector(unsigned(curSP) + 2);
             elsif inc = "111" then
-                curSP <= "111111111110";
+                -- curSP <= "111111111110";
+                curSP <= std_logic_vector(unsigned(curSP) - 1);
             end if;
             -- curSP <= spINC;
         elsif falling_edge(clk) then

@@ -22,16 +22,14 @@ BEGIN
     BEGIN
         IF reset = '1' THEN
             pc_reg <= x"0000";
+        ELSIF pcSel = '1' THEN
+            pc_reg <= pcData;
+        ELSIF pcSel2 = '1' THEN
+            pc_reg <= pcData2;
         ELSIF rising_edge(clk) THEN
             IF enable = '1' THEN
                 pcINC := std_logic_vector(unsigned(pc_reg) + unsigned(inc));
-                IF pcSel = '1' THEN
-                    pc_reg <= pcData;
-                ELSIF pcSel2 = '1' THEN
-                    pc_reg <= pcData2;
-                ELSE
-                    pc_reg <= pcINC;
-                END IF;
+                pc_reg <= pcINC;
             END IF;
         END IF;
     END PROCESS;

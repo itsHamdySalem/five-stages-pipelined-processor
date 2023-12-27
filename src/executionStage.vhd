@@ -34,7 +34,8 @@ ENTITY ExecutionStage IS
         Fwrd_data1, Fwrd_data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         PcSelect : OUT STD_LOGIC;
         PcData : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-        z_in: in std_logic
+        z_in: in std_logic;
+        cjFlush : out std_logic
 
     );
 END ENTITY ExecutionStage;
@@ -80,8 +81,10 @@ BEGIN
     spDecOut <= spDecIn;
     spIncOut <= spIncIn;
 
-    PcSelect <= '1' when instruction(15 downto 11) = "01001" and z_in = '1' else PcSelect;
-    PcData <= RS1(15 DOWNTO 0) when instruction(15 downto 11) = "01001" and z_in = '1' else PcData;
+    PcSelect <= '1' when instruction(15 downto 11) = "01001" else '0';
+    PcData <= RS1(15 DOWNTO 0);
+    
+    cjFlush <= '1' when instruction(15 downto 11) = "01001" else '0';
 
     -- inFlag_temp <= outFlag_temp;
 

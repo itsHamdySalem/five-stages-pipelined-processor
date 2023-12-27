@@ -32,7 +32,8 @@ ENTITY DecodingStage IS
         WriteData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         R0, R1, R2, R3, R4, R5, R6, R7 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
         PcSelect : OUT STD_LOGIC;
-        PcData : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+        PcData : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ucjFlush : out std_logic
     );
 END ENTITY DecodingStage;
 
@@ -44,7 +45,8 @@ BEGIN
         R0, R1, R2, R3, R4, R5, R6, R7);
 
     Rdest_out <= Rdest;
-
+    
+    ucjFlush <= '1' when instruction(15 downto 11) = "11001" else '0';
     instruction_out <= instruction;
 
     PcSelect <= '1' when instruction(15 downto 11) = "01010" else '0';
