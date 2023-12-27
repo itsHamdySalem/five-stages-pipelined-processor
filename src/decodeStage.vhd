@@ -30,28 +30,16 @@ ENTITY DecodingStage IS
         WriteEnable : IN STD_LOGIC;
         WriteReg : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         WriteData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        R0, R1, R2, R3, R4, R5, R6, R7 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-        Fwrd_sel1, Fwrd_sel2 : IN STD_LOGIC;
-        Fwrd_data1, Fwrd_data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0)
+        R0, R1, R2, R3, R4, R5, R6, R7 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
 END ENTITY DecodingStage;
 
 ARCHITECTURE decoding OF DecodingStage IS
 
-    SIGNAL RegFile_Rsrc1Data, RegFile_Rsrc2Data : STD_LOGIC_VECTOR(31 DOWNTO 0);
-
 BEGIN
     ControlU : ENTITY work.ControlUnit PORT MAP(clk, instruction, Imm, InOp, OutOp, MemOp, regWrite, pcSrc, memRead, memWrite, memToReg, spInc, spDec, isOneOp);
-    regFile : ENTITY work.RegistersFile PORT MAP(clk, rst, RS1, RS2, Rdest, WriteEnable, WriteReg, WriteData, RegFile_Rsrc1Data, RegFile_Rsrc2Data, RdstData,
+    regFile : ENTITY work.RegistersFile PORT MAP(clk, rst, RS1, RS2, Rdest, WriteEnable, WriteReg, WriteData, RS1Data, RS2Data, RdstData,
         R0, R1, R2, R3, R4, R5, R6, R7);
-
-    RS1Data <=
-        Fwrd_data1 WHEN Fwrd_sel1 = '1' ELSE
-        RegFile_Rsrc1Data;
-
-    RS2Data <=
-        Fwrd_data2 WHEN Fwrd_sel2 = '1' ELSE
-        RegFile_Rsrc2Data;
 
     Rdest_out <= Rdest;
 

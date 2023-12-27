@@ -33,7 +33,9 @@ ENTITY ID_EX IS
         SP_INC_IN : IN STD_LOGIC;
         SP_INC_OUT : OUT STD_LOGIC;
         SP_DEC_IN : IN STD_LOGIC;
-        SP_DEC_OUT : OUT STD_LOGIC
+        SP_DEC_OUT : OUT STD_LOGIC;
+        RS1_in, RS2_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        RS1_out, RS2_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
     );
 END ID_EX;
 
@@ -133,6 +135,8 @@ BEGIN
                 SP_INC_OUT <= '0';
                 imm2 <= '1';
             END IF;
+            Rs1_out <= Rs1_in;
+            Rs2_out <= Rs2_in;
         END IF;
     END PROCESS;
 

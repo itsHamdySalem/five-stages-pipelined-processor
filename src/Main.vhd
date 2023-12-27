@@ -70,6 +70,7 @@ ARCHITECTURE Processor_design OF Processor IS
 
     SIGNAL Z, N, C : STD_LOGIC;
 
+    SIGNAL RS1_ID_EX, RS2_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
     SIGNAL Fwrd_sel1, Fwrd_sel2 : STD_LOGIC;
     SIGNAL Fwrd_data1, Fwrd_data2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
@@ -93,20 +94,6 @@ BEGIN
         RS2_IFID,
         Rdest_IFID,
         instruction_IFID
-        );
-
-    ForwardingUnitInstance : ENTITY work.ForwardingUnit PORT MAP(
-        clk,
-        RS1_IFID,
-        RS2_IFID,
-        Rdst_sel_ID_EX,
-        Rdst_sel_EX,
-        Alu_Out_EX,
-        Alu_Out_Mem,
-        Fwrd_sel1,
-        Fwrd_sel2,
-        Fwrd_data1,
-        Fwrd_data2
         );
 
     DecodeInstance : ENTITY work.DecodingStage PORT MAP(
@@ -136,9 +123,7 @@ BEGIN
         writeRegisterEnable_D,
         writeRegisterSel_D,
         writeRegisterData_D,
-        R0, R1, R2, R3, R4, R5, R6, R7,
-        Fwrd_sel1, Fwrd_sel2,
-        Fwrd_data1, Fwrd_data2
+        R0, R1, R2, R3, R4, R5, R6, R7
         );
 
     ID_EXInstance : ENTITY work.ID_EX PORT MAP(
@@ -175,7 +160,23 @@ BEGIN
         spIncSig_D,
         spIncSig_ID_EX,
         spDecSig_D,
-        spDecSig_ID_EX
+        spDecSig_ID_EX,
+        RS1_IFID, RS2_IFID,
+        RS1_ID_EX, RS2_ID_EX
+        );
+
+    ForwardingUnitInstance : ENTITY work.ForwardingUnit PORT MAP(
+        clk,
+        RS1_ID_EX,
+        RS2_ID_EX,
+        Rdst_sel_EX_Mem,
+        Rdst_sel_Mem_WB,
+        Alu_Out_EX_Mem,
+        Alu_Out_Mem_WB,
+        Fwrd_sel1,
+        Fwrd_sel2,
+        Fwrd_data1,
+        Fwrd_data2
         );
 
     EXInstance : ENTITY work.ExecutionStage PORT MAP(
@@ -204,7 +205,11 @@ BEGIN
         spIncSig_ID_EX,
         spDecSig_ID_EX,
         spIncSig_EX,
-        spDecSig_EX
+        spDecSig_EX,
+        Fwrd_sel1,
+        Fwrd_sel2,
+        Fwrd_data1,
+        Fwrd_data2
         );
 
     EX_MemInstance : ENTITY work.EX_Mem PORT MAP(

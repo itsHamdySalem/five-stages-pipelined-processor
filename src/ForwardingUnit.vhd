@@ -23,7 +23,10 @@ BEGIN
     PROCESS (clk)
     BEGIN
         IF rising_edge(clk) THEN
-            IF (ALU_sel = Rsrc1_sel OR ALU_sel = Rsrc2_sel) AND (Mem_sel = Rsrc1_sel OR Mem_sel = Rsrc2_sel) THEN
+            IF (Rsrc1_sel = "UUU" OR Rsrc2_sel = "UUU") THEN
+                Fwrd_sel1 <= '0';
+                Fwrd_sel2 <= '0';
+            ELSIF (ALU_sel = Rsrc1_sel OR ALU_sel = Rsrc2_sel) AND (Mem_sel = Rsrc1_sel OR Mem_sel = Rsrc2_sel) THEN
                 IF (ALU_sel = Mem_sel) THEN
                     IF (ALU_sel = Rsrc1_sel) THEN
                         Fwrd_sel1 <= '1';

@@ -1,52 +1,60 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.numeric_std.all;
+USE IEEE.numeric_std.ALL;
 
 ENTITY ExecutionStage IS
     PORT (
-        clk:                IN std_logic;
-        rst :               IN std_logic;
-        instruction:        IN std_logic_vector(15 DOWNTO 0);
-        isOneOp :           IN STD_LOGIC;
-        isImmediate :           IN STD_LOGIC;
-        RS1 :           IN std_logic_vector(31 DOWNTO 0);
-        RS2 :           IN std_logic_vector(31 DOWNTO 0);
-        RDst :          IN std_logic_vector(31 DOWNTO 0);
-        ImmVal :          IN std_logic_vector(31 DOWNTO 0);
-        willBranch:              OUT STD_LOGIC;
-        outFlag:              OUT std_logic_vector(2 DOWNTO 0);
-        Alu_Out:                OUT std_logic_vector(31 downto 0);
-        memReadSig_in:          IN STD_LOGIC;
-        memReadSig_out:         out STD_LOGIC;
-        instruction_out:        out std_logic_vector(15 DOWNTO 0);
-        Rdst_sel_in : IN STD_LOGIC_VECTOR(2 downto 0);
-        Rdst_sel_out : out STD_LOGIC_VECTOR(2 downto 0);
-        MemAdr : in STD_LOGIC_VECTOR(31 downto 0);
-        MemAdr_out : out STD_LOGIC_VECTOR(31 downto 0);
+        clk : IN STD_LOGIC;
+        rst : IN STD_LOGIC;
+        instruction : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        isOneOp : IN STD_LOGIC;
+        isImmediate : IN STD_LOGIC;
+        RS1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        RS2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        RDst : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        ImmVal : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        willBranch : OUT STD_LOGIC;
+        outFlag : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        Alu_Out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        memReadSig_in : IN STD_LOGIC;
+        memReadSig_out : OUT STD_LOGIC;
+        instruction_out : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        Rdst_sel_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        Rdst_sel_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        MemAdr : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        MemAdr_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-        regWriteSig_in:      IN STD_LOGIC;
-        regWriteSig_out:      out STD_LOGIC;
-        Z,N,C:              out std_logic;
-        spIncIn,spDecIn:              in std_logic;
-        spIncOut,spDecOut:              out std_logic
-        
+        regWriteSig_in : IN STD_LOGIC;
+        regWriteSig_out : OUT STD_LOGIC;
+        Z, N, C : OUT STD_LOGIC;
+        spIncIn, spDecIn : IN STD_LOGIC;
+        spIncOut, spDecOut : OUT STD_LOGIC;
 
+        Fwrd_sel1, Fwrd_sel2 : IN STD_LOGIC;
+        Fwrd_data1, Fwrd_data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
 END ENTITY ExecutionStage;
 
-ARCHITECTURE execution OF ExecutionStage  IS
- 
-signal A : std_logic_vector(31 DOWNTO 0);
-signal B : std_logic_vector(31 DOWNTO 0);
-signal F_out : std_logic_vector(31 DOWNTO 0);
-signal outFlag_temp : std_logic_vector(2 DOWNTO 0);
+ARCHITECTURE execution OF ExecutionStage IS
+
+    SIGNAL A : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL B : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL F_out : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL outFlag_temp : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
 BEGIN
 
-    A <= RS1 when isOneOp = '0' else RDst;
-    B <= RS2 when isImmediate = '0' else ImmVal;
+    A <=
+        Fwrd_data1 WHEN Fwrd_sel1 = '1' ELSE
+        RS1 WHEN isOneOp = '0' ELSE
+        RDst;
 
-    ALUInstance : entity work.AluEnt port map(A, B, instruction(15 downto 11), "000", outFlag_temp, F_out);
+    B <=
+        Fwrd_data2 WHEN Fwrd_sel2 = '1' ELSE
+        RS2 WHEN isImmediate = '0' ELSE
+        ImmVal;
+
+    ALUInstance : ENTITY work.AluEnt PORT MAP(A, B, instruction(15 DOWNTO 11), "000", outFlag_temp, F_out);
 
     Alu_Out <= F_out;
     outFlag <= outFlag_temp;
