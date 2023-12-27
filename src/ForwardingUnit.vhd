@@ -21,78 +21,137 @@ ENTITY ForwardingUnit IS
 END ForwardingUnit;
 
 ARCHITECTURE ForwardingUnitArch OF ForwardingUnit IS
-
-    SIGNAL Rsrc1_sel_sig : STD_LOGIC_VECTOR(2 DOWNTO 0);
-
 BEGIN
-
-    Rsrc1_sel_sig <= Rdst_sel WHEN isOneOperand = '1' ELSE
-        Rsrc1_sel;
-
     PROCESS (clk)
     BEGIN
-        IF (Rsrc1_sel_sig = "UUU" OR Rsrc2_sel = "UUU") THEN
-            Fwrd_sel1 <= '0';
-            Fwrd_sel2 <= '0';
-        ELSIF (ALU_sel = Rsrc1_sel_sig OR ALU_sel = Rsrc2_sel) AND (Mem_sel = Rsrc1_sel_sig OR Mem_sel = Rsrc2_sel) THEN
-            IF (ALU_sel = Mem_sel) THEN
-                IF (ALU_sel = Rsrc1_sel_sig) THEN
+        IF (isOneOperand = '1') THEN
+            IF (Rdst_sel = "UUU" OR Rsrc2_sel = "UUU") THEN
+                Fwrd_sel1 <= '0';
+                Fwrd_sel2 <= '0';
+            ELSIF (ALU_sel = Rdst_sel OR ALU_sel = Rsrc2_sel) AND (Mem_sel = Rdst_sel OR Mem_sel = Rsrc2_sel) THEN
+                IF (ALU_sel = Mem_sel) THEN
+                    IF (ALU_sel = Rdst_sel) THEN
+                        Fwrd_sel1 <= '1';
+                        Fwrd_data1 <= ALU_out;
+                    ELSE
+                        Fwrd_sel1 <= '0';
+                    END IF;
+                    IF (ALU_sel = Rsrc2_sel) THEN
+                        Fwrd_sel2 <= '1';
+                        Fwrd_data2 <= ALU_out;
+                    ELSE
+                        Fwrd_sel2 <= '0';
+                    END IF;
+                ELSE
                     Fwrd_sel1 <= '1';
-                    Fwrd_data1 <= ALU_out;
-                ELSE
-                    Fwrd_sel1 <= '0';
-                END IF;
-                IF (ALU_sel = Rsrc2_sel) THEN
                     Fwrd_sel2 <= '1';
-                    Fwrd_data2 <= ALU_out;
+                    IF (Rdst_sel = ALU_sel) THEN
+                        Fwrd_data1 <= ALU_out;
+                    ELSE
+                        Fwrd_data1 <= Mem_out;
+                    END IF;
+                    IF (Rsrc2_sel = ALU_sel) THEN
+                        Fwrd_data2 <= ALU_out;
+                    ELSE
+                        Fwrd_data2 <= Mem_out;
+                    END IF;
+                END IF;
+            ELSIF (ALU_sel = Rdst_sel OR ALU_sel = Rsrc2_sel) XOR (Mem_sel = Rdst_sel OR Mem_sel = Rsrc2_sel) THEN
+                IF (ALU_sel = Rdst_sel OR ALU_sel = Rsrc2_sel) THEN
+                    IF (ALU_sel = Rdst_sel) THEN
+                        Fwrd_sel1 <= '1';
+                        Fwrd_data1 <= ALU_out;
+                    ELSE
+                        Fwrd_sel1 <= '0';
+                    END IF;
+                    IF (ALU_sel = Rsrc2_sel) THEN
+                        Fwrd_sel2 <= '1';
+                        Fwrd_data2 <= ALU_out;
+                    ELSE
+                        Fwrd_sel2 <= '0';
+                    END IF;
                 ELSE
-                    Fwrd_sel2 <= '0';
+                    IF (Mem_sel = Rdst_sel) THEN
+                        Fwrd_sel1 <= '1';
+                        Fwrd_data1 <= Mem_out;
+                    ELSE
+                        Fwrd_sel1 <= '0';
+                    END IF;
+                    IF (Mem_sel = Rsrc2_sel) THEN
+                        Fwrd_sel2 <= '1';
+                        Fwrd_data2 <= Mem_out;
+                    ELSE
+                        Fwrd_sel2 <= '0';
+                    END IF;
                 END IF;
             ELSE
-                Fwrd_sel1 <= '1';
-                Fwrd_sel2 <= '1';
-                IF (Rsrc1_sel_sig = ALU_sel) THEN
-                    Fwrd_data1 <= ALU_out;
-                ELSE
-                    Fwrd_data1 <= Mem_out;
-                END IF;
-                IF (Rsrc2_sel = ALU_sel) THEN
-                    Fwrd_data2 <= ALU_out;
-                ELSE
-                    Fwrd_data2 <= Mem_out;
-                END IF;
-            END IF;
-        ELSIF (ALU_sel = Rsrc1_sel_sig OR ALU_sel = Rsrc2_sel) XOR (Mem_sel = Rsrc1_sel_sig OR Mem_sel = Rsrc2_sel) THEN
-            IF (ALU_sel = Rsrc1_sel_sig OR ALU_sel = Rsrc2_sel) THEN
-                IF (ALU_sel = Rsrc1_sel_sig) THEN
-                    Fwrd_sel1 <= '1';
-                    Fwrd_data1 <= ALU_out;
-                ELSE
-                    Fwrd_sel1 <= '0';
-                END IF;
-                IF (ALU_sel = Rsrc2_sel) THEN
-                    Fwrd_sel2 <= '1';
-                    Fwrd_data2 <= ALU_out;
-                ELSE
-                    Fwrd_sel2 <= '0';
-                END IF;
-            ELSE
-                IF (Mem_sel = Rsrc1_sel_sig) THEN
-                    Fwrd_sel1 <= '1';
-                    Fwrd_data1 <= Mem_out;
-                ELSE
-                    Fwrd_sel1 <= '0';
-                END IF;
-                IF (Mem_sel = Rsrc2_sel) THEN
-                    Fwrd_sel2 <= '1';
-                    Fwrd_data2 <= Mem_out;
-                ELSE
-                    Fwrd_sel2 <= '0';
-                END IF;
+                Fwrd_sel1 <= '0';
+                Fwrd_sel2 <= '0';
             END IF;
         ELSE
-            Fwrd_sel1 <= '0';
-            Fwrd_sel2 <= '0';
+            IF (Rsrc1_sel = "UUU" OR Rsrc2_sel = "UUU") THEN
+                Fwrd_sel1 <= '0';
+                Fwrd_sel2 <= '0';
+            ELSIF (ALU_sel = Rsrc1_sel OR ALU_sel = Rsrc2_sel) AND (Mem_sel = Rsrc1_sel OR Mem_sel = Rsrc2_sel) THEN
+                IF (ALU_sel = Mem_sel) THEN
+                    IF (ALU_sel = Rsrc1_sel) THEN
+                        Fwrd_sel1 <= '1';
+                        Fwrd_data1 <= ALU_out;
+                    ELSE
+                        Fwrd_sel1 <= '0';
+                    END IF;
+                    IF (ALU_sel = Rsrc2_sel) THEN
+                        Fwrd_sel2 <= '1';
+                        Fwrd_data2 <= ALU_out;
+                    ELSE
+                        Fwrd_sel2 <= '0';
+                    END IF;
+                ELSE
+                    Fwrd_sel1 <= '1';
+                    Fwrd_sel2 <= '1';
+                    IF (Rsrc1_sel = ALU_sel) THEN
+                        Fwrd_data1 <= ALU_out;
+                    ELSE
+                        Fwrd_data1 <= Mem_out;
+                    END IF;
+                    IF (Rsrc2_sel = ALU_sel) THEN
+                        Fwrd_data2 <= ALU_out;
+                    ELSE
+                        Fwrd_data2 <= Mem_out;
+                    END IF;
+                END IF;
+            ELSIF (ALU_sel = Rsrc1_sel OR ALU_sel = Rsrc2_sel) XOR (Mem_sel = Rsrc1_sel OR Mem_sel = Rsrc2_sel) THEN
+                IF (ALU_sel = Rsrc1_sel OR ALU_sel = Rsrc2_sel) THEN
+                    IF (ALU_sel = Rsrc1_sel) THEN
+                        Fwrd_sel1 <= '1';
+                        Fwrd_data1 <= ALU_out;
+                    ELSE
+                        Fwrd_sel1 <= '0';
+                    END IF;
+                    IF (ALU_sel = Rsrc2_sel) THEN
+                        Fwrd_sel2 <= '1';
+                        Fwrd_data2 <= ALU_out;
+                    ELSE
+                        Fwrd_sel2 <= '0';
+                    END IF;
+                ELSE
+                    IF (Mem_sel = Rsrc1_sel) THEN
+                        Fwrd_sel1 <= '1';
+                        Fwrd_data1 <= Mem_out;
+                    ELSE
+                        Fwrd_sel1 <= '0';
+                    END IF;
+                    IF (Mem_sel = Rsrc2_sel) THEN
+                        Fwrd_sel2 <= '1';
+                        Fwrd_data2 <= Mem_out;
+                    ELSE
+                        Fwrd_sel2 <= '0';
+                    END IF;
+                END IF;
+            ELSE
+                Fwrd_sel1 <= '0';
+                Fwrd_sel2 <= '0';
+            END IF;
         END IF;
     END PROCESS;
 END ForwardingUnitArch;
