@@ -5,6 +5,7 @@ USE IEEE.numeric_std.all;
 entity ID_EX is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
+           cjFlush : in STD_LOGIC;
            instruction: in STD_LOGIC_VECTOR(15 downto 0);
            SP_EA: in STD_LOGIC_VECTOR(31 downto 0);
            Rdst_sel_in : in STD_LOGIC_VECTOR(2 downto 0);
@@ -16,7 +17,6 @@ entity ID_EX is
            WB_control_in : in STD_LOGIC_VECTOR(2 downto 0);
            isOneOp:      in STD_LOGIC;
            memReadSig_in:      IN STD_LOGIC;
-           regWriteSig_in:      IN STD_LOGIC;
 
            MemAdr : out STD_LOGIC_VECTOR(31 downto 0);
            Rdst_sel_out : out STD_LOGIC_VECTOR(2 downto 0);
@@ -60,9 +60,26 @@ architecture Behavioral of ID_EX is
     signal SP_DEC_IN_sig, SP_INC_IN_sig: STD_LOGIC := '0';
 
 begin
-    process(clk, rst) -- TODO:: deal with the reset if there is any.
+    process(clk, rst, cjFlush) -- TODO:: deal with the reset if there is any.
     begin 
-        IF rising_edge(clk) THEN
+        if rst or cjFlush then
+            MemAdr <= (others => '0');
+            Rdst_sel_out <= (others => '0');
+            immediate_out <= (others => '0');
+            Rsrc1_out <= (others => '0');
+            Rsrc2_out <= (others => '0');
+            Rdest_out <= (others => '0');
+            isImmediate <= '0';
+            ALU_OP <= (others => '0');
+            Mem_control_out <= (others => '0');
+            WB_control_out <= (others => '0');
+            instruction_out <= (others => '0');
+            isOneOp_out <= '0';
+            memReadSig_out <= '0';
+            regWriteSig_out <= '0';
+            SP_INC_OUT <= '0';
+            SP_DEC_OUT <= '0';
+        elsIF rising_edge(clk) THEN
         if imm2 = '1' then 
             -- output <= prev signal
             imm1 <= '0';

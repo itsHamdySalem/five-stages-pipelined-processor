@@ -73,6 +73,7 @@ Architecture Processor_design of Processor is
     signal curData: STD_LOGIC_VECTOR(31 downto 0);
 
     signal Z, N, C : STD_LOGIC;
+    signal cjFlush, ucjFlush : STD_LOGIC;
 
 BEGIN
     fetchStageInstance: entity work.fetchStage port map(
@@ -89,6 +90,8 @@ BEGIN
     IF_IDInstance: entity work.IF_ID port map(
         clk,
         reset,
+        cjFlush,
+        ucjFlush,
         instruction_F,
         RS1_IFID,
         RS2_IFID,
@@ -124,13 +127,15 @@ BEGIN
         writeRegisterEnable_D,
         writeRegisterSel_D,
         writeRegisterData_D,
-        R0,R1,R2,R3,R4,R5,R6,R7
+        R0,R1,R2,R3,R4,R5,R6,R7,
+        ucjFlush
     );
 
     
     ID_EXInstance: entity work.ID_EX port map(
         clk,
         reset,
+        cjFlush,
         instruction_D,
         x"00000000", -- mem Address
         Rdest_D,
@@ -191,7 +196,8 @@ BEGIN
         spIncSig_ID_EX,
         spDecSig_ID_EX,
         spIncSig_EX,
-        spDecSig_EX
+        spDecSig_EX,
+        cjFlush
     );
 
     EX_MemInstance: entity work.EX_Mem port map(

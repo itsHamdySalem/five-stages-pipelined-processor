@@ -28,8 +28,8 @@ ENTITY ExecutionStage IS
         regWriteSig_out:      out STD_LOGIC;
         Z,N,C:              out std_logic;
         spIncIn,spDecIn:              in std_logic;
-        spIncOut,spDecOut:              out std_logic
-        
+        spIncOut,spDecOut:              out std_logic;
+        cjFlush : out std_logic
 
     );
 END ENTITY ExecutionStage;
@@ -65,4 +65,6 @@ BEGIN
 
     spDecOut <= spDecIn;
     spIncOut <= spIncIn;
+
+    cjFlush <= '1' when instruction = "0000000000011000" else '0';
 END execution;

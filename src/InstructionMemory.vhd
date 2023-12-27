@@ -21,10 +21,7 @@ END ENTITY instructionMem;
 ARCHITECTURE instructionMem_design OF instructionMem  IS 
     TYPE ram_type IS ARRAY(0 TO 2**12 - 1) OF std_logic_vector(15 DOWNTO 0);
         
-    SIGNAL ram : ram_type ; 
-
-        
-    SIGNAL ram : ram_type ; 
+    SIGNAL ram : ram_type ;
 
 BEGIN
 
@@ -73,8 +70,6 @@ BEGIN
         IF rising_edge(clk) THEN
         instruction  <= ram(to_integer(unsigned(readAddress)));
         immediate    <= ram(to_integer(unsigned(readAddress))+1);
-        END IF;
-
         END IF;
 
     END PROCESS;

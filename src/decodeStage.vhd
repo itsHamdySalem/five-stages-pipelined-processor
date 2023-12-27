@@ -30,7 +30,8 @@ ENTITY DecodingStage IS
         WriteEnable :               IN std_logic;
         WriteReg :               IN std_logic_vector(2 DOWNTO 0);
         WriteData :    	        IN std_logic_vector(31 DOWNTO 0);
-        R0,R1,R2,R3,R4,R5,R6,R7: OUT std_logic_vector(31 DOWNTO 0)
+        R0,R1,R2,R3,R4,R5,R6,R7: OUT std_logic_vector(31 DOWNTO 0);
+        ucjFlush : out std_logic
     );
 END ENTITY DecodingStage;
 
@@ -48,5 +49,6 @@ BEGIN
     --     END IF;
     -- END PROCESS;
     
+    ucjFlush <= '1' when instruction = "0000000000011001" else '0';
     instruction_out <= instruction;
 END decoding;

@@ -12,11 +12,7 @@ entity EA is
 end EA;
 
 architecture Behavioral of EA is
-<<<<<<< HEAD
     
-=======
-
->>>>>>> 74150a13db36dc7bdaa3065f04dd7dffb6079c4c
 begin
     process(clk, rst) -- TODO:: deal with the reset if there is any.
     begin 
@@ -25,8 +21,4 @@ begin
         end if;
     end process;
 
-<<<<<<< HEAD
 end Behavioral;
-=======
-end Behavioral;
->>>>>>> 74150a13db36dc7bdaa3065f04dd7dffb6079c4c

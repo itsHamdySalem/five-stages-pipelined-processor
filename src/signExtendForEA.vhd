@@ -11,4 +11,4 @@ architecture sign_extend_arch of sign_extend is
 begin
     OUTPUT(31 downto 20) <=  (others => '0');
     OUTPUT(19 downto 0) <= INPUT;
-end architecture;
+end sign_extend_arch;
