@@ -31,7 +31,7 @@ BEGIN
 
     PROCESS (clk)
     BEGIN
-        IF rising_edge(clk) THEN
+        -- IF rising_edge(clk) THEN
             IF (Rsrc1_sel_sig = "UUU" OR Rsrc2_sel = "UUU") THEN
                 Fwrd_sel1 <= '0';
                 Fwrd_sel2 <= '0';
@@ -95,6 +95,6 @@ BEGIN
                 Fwrd_sel1 <= '0';
                 Fwrd_sel2 <= '0';
             END IF;
-        END IF;
+        -- END IF;
     END PROCESS;
 END ForwardingUnitArch;
