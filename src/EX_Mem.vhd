@@ -20,7 +20,11 @@ entity EX_Mem is
            spIncIn,spDecIn:              in std_logic;
            spIncOut, spDecOut:              out std_logic;
            zin: in std_logic;
-           zout: out std_logic
+           zout: out std_logic;
+           dataToWriteInMemory_in: in std_logic_vector(31 downto 0);
+            writeInMemoryEnable_in: in std_logic;
+            dataToWriteInMemory_out: out std_logic_vector(31 downto 0);
+            writeInMemoryEnable_out: out std_logic
            );
 end EX_Mem;
 
@@ -39,6 +43,8 @@ begin
             spDecOut <= spDecIn;
             spIncOut <= spIncIn;      
             zout <= zin;  
+            dataToWriteInMemory_out <= dataToWriteInMemory_in;
+            writeInMemoryEnable_out <= writeInMemoryEnable_in;
         end if;
     end process;
 end Behavioral;

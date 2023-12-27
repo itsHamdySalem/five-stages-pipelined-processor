@@ -31,11 +31,14 @@ END ENTITY memoryStage;
 ARCHITECTURE execution OF memoryStage  IS
 
 signal protectEnable: STD_LOGIC;
+signal freeEnable: STD_LOGIC;
+
 signal inc: std_logic_vector(2 DOWNTO 0);
 signal spOut:                              std_logic_vector(11 DOWNTO 0);
 
 BEGIN
     protectEnable <= '1' when instruction(15 DOWNTO 11) = "00111" else '0';
+    freeEnable <= '1' when instruction(15 DOWNTO 11) = "01000" else '0';
 
     
     inc <=  "010" when instruction(15 downto 11) = "11100" or instruction(15 downto 11) = "11101" else
@@ -56,7 +59,8 @@ BEGIN
         instruction,
         aluOut,
         inc,spOut,
-        curData
+        curData,
+        freeEnable
     );
 
     SP <= spOut;

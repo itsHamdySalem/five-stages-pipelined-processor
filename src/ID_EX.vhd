@@ -106,7 +106,8 @@ begin
                 imm2 <= '0';
                 MemAdr <= x"000" & instruction_sig(7 DOWNTO 4) & instruction;
                 Rdst_sel_out <= Rdst_sel_in_sig;
-                immediate_out <= x"000" & instruction_sig(7 DOWNTO 4) & instruction;
+                immediate_out <= x"0000" & instruction when instruction_sig(15 DOWNTO 11) = "10101"
+                    else x"000" & instruction_sig(7 DOWNTO 4) & instruction;
                 Rsrc1_out <= Rsrc1_in_sig;
                 Rsrc2_out <= Rsrc2_in_sig;
                 isImmediate <= isImmediate_In_sig;
@@ -143,6 +144,8 @@ begin
                 Rdst_sel_in_sig <= Rdst_sel_in;
                 immediate_in_sig <= immediate_in;
                 Rsrc1_in_sig <= Rsrc1_in;
+                Rsrc2_in_sig <= Rsrc2_in;
+                Rdest_in_sig <= Rdest_in;
                 isImmediate_In_sig <= isImmediate_In;
                 ALU_OP_In_sig <= ALU_OP_In;
                 Mem_control_in_sig <= Mem_control_in;

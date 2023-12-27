@@ -35,7 +35,9 @@ ENTITY ExecutionStage IS
         PcSelect : OUT STD_LOGIC;
         PcData : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
         z_in: in std_logic;
-        cjFlush : out std_logic
+        cjFlush : out std_logic;
+        dataToWriteInMemory: out std_logic_vector(31 downto 0);
+        dataToWriteInMemoryEnable: out std_logic
 
     );
 END ENTITY ExecutionStage;
@@ -63,14 +65,23 @@ BEGIN
 
     ALUInstance : ENTITY work.AluEnt PORT MAP(A, B, instruction(15 DOWNTO 11), inFlag_temp, outFlag_temp, F_out);
 
-    Alu_Out <= F_out;
+    Alu_Out <= ImmVal when instruction(15 DOWNTO 11) = "11001"
+    ELSE F_out;
+
     outFlag <= outFlag_temp;
 
     memReadSig_out <= memReadSig_in;
     instruction_out <= instruction;
 
     Rdst_sel_out <= Rdst_sel_in;
-    MemAdr_out <= MemAdr;
+
+    MemAdr_out <= ImmVal when instruction(15 DOWNTO 11) = "11011"
+    ELSE A when instruction(15 DOWNTO 11) = "00111" or instruction(15 DOWNTO 11) = "01000"
+    ELSE MemAdr;
+
+    dataToWriteInMemory <= A;
+    dataToWriteInMemoryEnable <= '1' when instruction(15 DOWNTO 11) = "11011"
+    ELSE '0';
 
     regWriteSig_out <= regWriteSig_in;
 

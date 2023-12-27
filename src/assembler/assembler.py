@@ -23,15 +23,24 @@ one_operand_instructions = {
 two_operand_instructions = {
     "ADD":      0b01110,
     "SUB":      0b01111,
-    "SWAP":     0b10000,
-    "CMP":      0b10001,
     "AND":      0b10010,
     "OR":       0b10011,
     "XOR":      0b10100,
 }
 
-immediate_value_instructions = {
+cmp_instruction = {
+    "CMP":      0b10001,
+}
+
+swap_instruction = {
+    "SWAP":     0b10000,
+}
+
+immediate_two_operand_instructions = {
     "ADDI":     0b10101,
+}
+
+immediate_value_instructions = {
     "BITSET":   0b10110,
     "RCL":      0b10111,
     "RCR":      0b11000,
@@ -47,8 +56,11 @@ opcodes = {
     **no_operand_instructions,
     **one_operand_instructions,
     **two_operand_instructions,
+    **immediate_two_operand_instructions,
     **immediate_value_instructions,
     **effective_address_instructions,
+    **cmp_instruction,
+    **swap_instruction,
 }
 
 general_purpose_registers = {
@@ -120,6 +132,27 @@ def assemble_immediate_value_instruction(opcode, Rd, immediate):
 
     machine_code1 = (opcode_value << OPCODE_SHIFT) | (Rd_value << RD_SHIFT)
     machine_code2 = immediate
+
+    if opcode_value == 0b11001:
+        return [machine_code1, machine_code2, 0]
+
+    return [machine_code1, machine_code2]
+
+
+def assemble_immediate_two_operand_instruction(opcode, Rd, Rsrc, immediate):
+    Rd_value = registers.get(Rd, None)
+    Rsrc_value = registers.get(Rsrc, None)
+
+    if Rd_value is None:
+        raise ValueError(f"Unknown register: {Rd} for opcode: {opcode}")
+    if Rsrc_value is None:
+        raise ValueError(f"Unknown register: {Rsrc} for opcode: {opcode}")
+
+    opcode_value = immediate_two_operand_instructions[opcode]
+
+    machine_code1 = (opcode_value << OPCODE_SHIFT) | (
+        Rd_value << RD_SHIFT) | (Rsrc_value << RS1_SHIFT)
+    machine_code2 = immediate
     return [machine_code1, machine_code2]
 
 
@@ -137,7 +170,44 @@ def assemble_effective_address_instruction(opcode, Rd, EA):
     return [machine_code1, machine_code2]
 
 
-input_file_path = "ISA.txt"
+def assemble_cmp_instruction(opcode, Rsrc1, Rsrc2):
+    Rs1_value = registers.get(Rsrc1, None)
+    Rs2_value = registers.get(Rsrc2, None)
+
+    if Rs1_value is None:
+        raise ValueError(f"Unknown register: {Rsrc1} for opcode: {opcode}")
+    elif Rs2_value is None:
+        raise ValueError(f"Unknown register: {Rsrc2} for opcode: {opcode}")
+
+    opcode_value = cmp_instruction[opcode]
+
+    machine_code = (opcode_value << OPCODE_SHIFT) | (Rs1_value << RD_SHIFT) | (
+        Rs1_value << RS1_SHIFT) | (Rs2_value << RS2_SHIFT)
+
+    return [machine_code]
+
+
+def assemble_swap_instruction(opcode, Rsrc1, Rsrc2):
+    Rs1_value = registers.get(Rsrc1, None)
+    Rs2_value = registers.get(Rsrc2, None)
+
+    if Rs1_value is None:
+        raise ValueError(f"Unknown register: {Rsrc1} for opcode: {opcode}")
+    elif Rs2_value is None:
+        raise ValueError(f"Unknown register: {Rsrc2} for opcode: {opcode}")
+
+    push_value = 0b00101
+    pop_value = 0b00110
+
+    machine_code1 = (push_value << OPCODE_SHIFT) | (Rs1_value << RD_SHIFT)
+    machine_code2 = (push_value << OPCODE_SHIFT) | (Rs2_value << RD_SHIFT)
+    machine_code3 = (pop_value << OPCODE_SHIFT) | (Rs1_value << RD_SHIFT)
+    machine_code4 = (pop_value << OPCODE_SHIFT) | (Rs2_value << RD_SHIFT)
+
+    return [machine_code1, machine_code2, machine_code3, machine_code4]
+
+
+input_file_path = "src/assembler/ISA.txt"
 output_file_path = "program.mem"
 
 with open(input_file_path, "r") as input_file, open(output_file_path, "w") as output_file:
@@ -163,12 +233,21 @@ with open(input_file_path, "r") as input_file, open(output_file_path, "w") as ou
         elif opcode in two_operand_instructions:
             machine_codes = assemble_two_operand_instruction(
                 opcode, segments[1], segments[2], segments[3])
+        elif opcode in immediate_two_operand_instructions:
+            machine_codes = assemble_immediate_two_operand_instruction(
+                opcode, segments[1], segments[2], int(segments[3], 16))
         elif opcode in immediate_value_instructions:
             machine_codes = assemble_immediate_value_instruction(
-                opcode, segments[1], int(segments[2]))
+                opcode, segments[1], int(segments[2], 16))
         elif opcode in effective_address_instructions:
             machine_codes = assemble_effective_address_instruction(
-                opcode, segments[1], int(segments[2]))
+                opcode, segments[1], int(segments[2], 16))
+        elif opcode in cmp_instruction:
+            machine_codes = assemble_cmp_instruction(
+                opcode, segments[1], segments[2])
+        elif opcode in swap_instruction:
+            machine_codes = assemble_swap_instruction(
+                opcode, segments[1], segments[2])
         else:
             raise ValueError(f"Unknown opcode: {opcode}")
 

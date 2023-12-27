@@ -42,6 +42,21 @@ BEGIN
                 spDec <= '0';
                 isOneOp <= '1';
 
+            WHEN "00010" =>
+                -- NEG instruction
+                Imm <= '0';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '1';
+
             WHEN "00011" =>
                 -- INC instruction
                 Imm <= '0';
@@ -85,6 +100,38 @@ BEGIN
                 spDec <= '0';
                 isOneOp <= '0';
 
+            WHEN "10010" =>
+                -- AND instruction
+                Imm <= '0';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
+
+            WHEN "10100" =>
+                -- XOR instruction
+                Imm <= '0';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
+
             WHEN "01101" =>
                 -- OUT instruction
                 Imm <= '0';
@@ -115,8 +162,38 @@ BEGIN
                 spDec <= '0';
                 isOneOp <= '0';
 
+            WHEN "11001" =>
+                -- LDM instruction
+                Imm <= '1';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
             WHEN "00111" =>
                 -- PROTECT instruction
+                Imm <= '0';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '1';
+                regWrite <= '0';
+                pcSrc <= '1';
+                memRead <= '0';
+                memWrite <= '1';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
+            WHEN "01000" =>
+                -- FREE instruction
                 Imm <= '0';
                 InOp <= '0';
                 OutOp <= '0';
@@ -162,7 +239,7 @@ BEGIN
 
 
             WHEN "01110" =>
-                -- POP instruction
+                -- ADD instruction
                 Imm <= '0';
                 InOp <= '0';
                 OutOp <= '0';
@@ -171,6 +248,128 @@ BEGIN
                 pcSrc <= '0';
                 memRead <= '0';
                 memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
+            WHEN "01111" =>
+                -- SUB instruction
+                Imm <= '0';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
+
+            WHEN "10101" =>
+                -- ADDI instruction
+                Imm <= '1';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
+            WHEN "10001" =>
+                -- CMP instruction
+                Imm <= '0';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '0';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
+
+            WHEN "10000" =>
+                -- CMP instruction
+                Imm <= '0';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '0';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '0';
+
+            WHEN "10110" =>
+                -- BITSET instruction
+                Imm <= '1';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '1';
+
+            WHEN "10111" =>
+                -- RCL instruction
+                Imm <= '1';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '1';
+
+            WHEN "11000" =>
+                -- RCR instruction
+                Imm <= '1';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '0';
+                regWrite <= '1';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '0';
+                memToReg <= '0';
+                spInc <= '0';
+                spDec <= '0';
+                isOneOp <= '1';
+
+            WHEN "11011" =>
+                -- STD instruction
+                Imm <= '1';
+                InOp <= '0';
+                OutOp <= '0';
+                MemOp <= '1';
+                regWrite <= '0';
+                pcSrc <= '0';
+                memRead <= '0';
+                memWrite <= '1';
                 memToReg <= '0';
                 spInc <= '0';
                 spDec <= '0';

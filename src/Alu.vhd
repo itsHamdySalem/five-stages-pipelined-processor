@@ -116,15 +116,39 @@ shift_left_Output <= shift_left_output_concatened(32 downto 1);
 
 bit_set_Carry <= A(to_integer(unsigned(B(4 downto 0))));
 
-process
-begin
+bit_set_Output(0) <= '1' when to_integer(unsigned(B(4 downto 0))) = 0 else A(0);
+bit_set_Output(1) <= '1' when to_integer(unsigned(B(4 downto 0))) = 1 else A(1);
+bit_set_Output(2) <= '1' when to_integer(unsigned(B(4 downto 0))) = 2 else A(2);
+bit_set_Output(3) <= '1' when to_integer(unsigned(B(4 downto 0))) = 3 else A(3);
+bit_set_Output(4) <= '1' when to_integer(unsigned(B(4 downto 0))) = 4 else A(4);
+bit_set_Output(5) <= '1' when to_integer(unsigned(B(4 downto 0))) = 5 else A(5);
+bit_set_Output(6) <= '1' when to_integer(unsigned(B(4 downto 0))) = 6 else A(6);
+bit_set_Output(7) <= '1' when to_integer(unsigned(B(4 downto 0))) = 7 else A(7);
+bit_set_Output(8) <= '1' when to_integer(unsigned(B(4 downto 0))) = 8 else A(8);
+bit_set_Output(9) <= '1' when to_integer(unsigned(B(4 downto 0))) = 9 else A(9);
+bit_set_Output(10) <= '1' when to_integer(unsigned(B(4 downto 0))) = 10 else A(10);
+bit_set_Output(11) <= '1' when to_integer(unsigned(B(4 downto 0))) = 11 else A(11);
+bit_set_Output(12) <= '1' when to_integer(unsigned(B(4 downto 0))) = 12 else A(12);
+bit_set_Output(13) <= '1' when to_integer(unsigned(B(4 downto 0))) = 13 else A(13);
+bit_set_Output(14) <= '1' when to_integer(unsigned(B(4 downto 0))) = 14 else A(14);
+bit_set_Output(15) <= '1' when to_integer(unsigned(B(4 downto 0))) = 15 else A(15);
+bit_set_Output(16) <= '1' when to_integer(unsigned(B(4 downto 0))) = 16 else A(16);
+bit_set_Output(17) <= '1' when to_integer(unsigned(B(4 downto 0))) = 17 else A(17);
+bit_set_Output(18) <= '1' when to_integer(unsigned(B(4 downto 0))) = 18 else A(18);
+bit_set_Output(19) <= '1' when to_integer(unsigned(B(4 downto 0))) = 19 else A(19);
+bit_set_Output(20) <= '1' when to_integer(unsigned(B(4 downto 0))) = 20 else A(20);
+bit_set_Output(21) <= '1' when to_integer(unsigned(B(4 downto 0))) = 21 else A(21);
+bit_set_Output(22) <= '1' when to_integer(unsigned(B(4 downto 0))) = 22 else A(22);
+bit_set_Output(23) <= '1' when to_integer(unsigned(B(4 downto 0))) = 23 else A(23);
+bit_set_Output(24) <= '1' when to_integer(unsigned(B(4 downto 0))) = 24 else A(24);
+bit_set_Output(25) <= '1' when to_integer(unsigned(B(4 downto 0))) = 25 else A(25);
+bit_set_Output(26) <= '1' when to_integer(unsigned(B(4 downto 0))) = 26 else A(26);
+bit_set_Output(27) <= '1' when to_integer(unsigned(B(4 downto 0))) = 27 else A(27);
+bit_set_Output(28) <= '1' when to_integer(unsigned(B(4 downto 0))) = 28 else A(28);
+bit_set_Output(29) <= '1' when to_integer(unsigned(B(4 downto 0))) = 29 else A(29);
+bit_set_Output(30) <= '1' when to_integer(unsigned(B(4 downto 0))) = 30 else A(30);
+bit_set_Output(31) <= '1' when to_integer(unsigned(B(4 downto 0))) = 31 else A(31);
 
-    for i in 0 to 31 loop
-        bit_set_Output(i) <= '1' when to_integer(unsigned(B(4 downto 0))) = i else A(i);
-    end loop;
-
-wait;
-end process;
 
 
 ----------------------------------------------------------------------------------
@@ -144,8 +168,8 @@ Out_Flags(1) <= F_Temp(31) when S /= "11111" else In_Flags(1);
 ------------------ flag(2) -> C
 Out_Flags(2) <= INC_Carry when  S="00011"
 else DEC_Carry when S = "00100" 
-else ADD_Carry when S = "01110" 
-else SUB_Carry when S = "01111" 
+else ADD_Carry when S = "01110" or S = "10101"
+else SUB_Carry when S = "01111" or S = "10001"
 else shift_right_Carry when S = "11000"
 else shift_left_Carry when S = "10111"
 else bit_set_Carry when S = "10110"
@@ -157,14 +181,14 @@ F_Temp <= (A_NOT)   When S = "00001"
     else (INC_Output)    when  S =  "00011"
     else (NEG_A)    when  S =  "00010"
     else (DEC_Output) when  S =  "00100"
-    else (ADD_Output)   when  S =  "01110"
-    else (SUB_Output) when  S =  "01111"
+    else (ADD_Output)   when  S =  "01110" or S ="10101"
+    else (SUB_Output) when  S =  "01111" or S = "10001"
     else (AND_Output)   when  S =  "10010"
     else (OR_Output)  when  S =  "10011"
     else (XOR_Output)  when  S =  "10100"
-    else shift_right_Output when S = "11000"
-    else shift_left_Output when S = "10111"
-    else bit_set_Output when S = "10110"
+    else (shift_right_Output) when S = "11000"
+    else (shift_left_Output) when S = "10111"
+    else (bit_set_Output) when S = "10110"
     else(A);
 	
     F <= F_Temp;

@@ -46,7 +46,7 @@ BEGIN
 
     Rdest_out <= Rdest;
     
-    ucjFlush <= '1' when instruction(15 downto 11) = "11001" else '0';
+    ucjFlush <= '1' when instruction(15 downto 11) = "01010" else '0';
     instruction_out <= instruction;
 
     PcSelect <= '1' when instruction(15 downto 11) = "01010" else '0';

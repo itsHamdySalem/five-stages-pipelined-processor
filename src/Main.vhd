@@ -72,11 +72,11 @@ ARCHITECTURE Processor_design OF Processor IS
 
     SIGNAL RS1_ID_EX, RS2_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
     SIGNAL Fwrd_sel1, Fwrd_sel2, zin, zout : STD_LOGIC;
-    SIGNAL Fwrd_data1, Fwrd_data2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL Fwrd_data1, Fwrd_data2, dataToWriteInMemory_EX, dataToWriteInMemory_EX_Mem : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-    signal cjFlush, ucjFlush : STD_LOGIC;
+    signal cjFlush, ucjFlush, writeInMemoryEnable_EX, writeInMemoryEnable_EX_Mem : STD_LOGIC;
 
-BEGIN
+BEGIN 
     fetchStageInstance : ENTITY work.fetchStage PORT MAP(
         clk,
         reset,
@@ -189,7 +189,7 @@ BEGIN
         Fwrd_sel2,
         Fwrd_data1,
         Fwrd_data2
-        );
+    );
 
     EXInstance : ENTITY work.ExecutionStage PORT MAP(
         clk,
@@ -225,7 +225,9 @@ BEGIN
         PcSelect2,
         PcData2,
         zout,
-        cjFlush
+        cjFlush,
+        dataToWriteInMemory_EX,
+        writeInMemoryEnable_EX
         );
 
     EX_MemInstance : ENTITY work.EX_Mem PORT MAP(
@@ -247,7 +249,11 @@ BEGIN
         spDecSig_EX,
         spIncSig_EX_Mem,
         spDecSig_EX_Mem,
-        Z,zout
+        Z,zout,
+        dataToWriteInMemory_EX,
+        writeInMemoryEnable_EX,
+        dataToWriteInMemory_EX_Mem,
+        writeInMemoryEnable_EX_Mem
         );
 
     MemInstance : ENTITY work.memoryStage PORT MAP(
@@ -257,8 +263,8 @@ BEGIN
         Alu_Out_EX_Mem,
         memAddress_EX_Mem,
         memReadSig_EX_Mem,
-        '0',
-        x"00000000",
+        writeInMemoryEnable_EX_Mem, -- write enable
+        dataToWriteInMemory_EX_Mem, -- write data
         Rdst_sel_EX_Mem,
         readData_Mem,
         Alu_Out_Mem,

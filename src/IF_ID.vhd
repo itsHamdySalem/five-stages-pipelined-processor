@@ -20,7 +20,7 @@ BEGIN
 PROCESS (clk, reset)
 BEGIN
 
-    if reset or cjFlush or ucjFlush then
+    if reset = '1' or cjFlush = '1' or ucjFlush = '1' then
         RS1 <= (others => '0');
         RS2 <= (others => '0');
         Rdest <= (others => '0');

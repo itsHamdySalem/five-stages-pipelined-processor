@@ -18,26 +18,23 @@ entity dataMem is
         alu_out:            in std_logic_vector(31 DOWNTO 0);
         inc : IN std_logic_vector(2 DOWNTO 0);
         sp : OUT std_logic_vector(11 DOWNTO 0);
-        curData: out std_logic_vector(31 downto 0)
+        curData: out std_logic_vector(31 downto 0);
+        freeEnable:      in std_logic
     );
 end entity;
 
 architecture dataMemDesign of dataMem is
     type ram_type is array(0 to 2**12 - 1) of std_logic_vector(31 downto 0);
-    signal ram: ram_type;
+    signal ram: ram_type := (0 => x"00000000", 1 => x"00000000", others => x"00000000");
     type ram_protected_type is array(0 to 2**12 - 1) of std_logic;
-    signal ram_protected: ram_protected_type;
-    signal curSP: STD_LOGIC_VECTOR(11 DOWNTO 0) := "111111111111";
+    signal ram_protected: ram_protected_type := (0 => '0', 1 => '0', others => '0');
+      signal curSP: STD_LOGIC_VECTOR(11 DOWNTO 0) := "111111111111";
 
 begin
 
     process(clk, rst)
     variable spINC:std_logic_vector(11 downto 0);
     begin    
-        ram(0) <= x"000000F1";
-        ram(1) <= x"000000F2";
-        ram(2) <= x"000000F3";
-        ram(3) <= x"000000F4";
         if rst = '1' then
             ram <= (others => (others => '0'));
             ram_protected <= (others => '0');
@@ -60,6 +57,8 @@ begin
                 ram(to_integer(unsigned(curSP))) <= alu_out;
             elsif protectEnable = '1' then
                 ram_protected(to_integer(unsigned(protectAddress))) <= '1';
+            elsif freeEnable = '1' then
+                ram_protected(to_integer(unsigned(protectAddress))) <= '0';
             elsif writeEnable = '1' and ram_protected(to_integer(unsigned(writeAddress))) = '0' then
                 ram(to_integer(unsigned(writeAddress))) <= writeData;
             end if;
